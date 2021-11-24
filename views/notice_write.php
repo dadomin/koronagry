@@ -11,6 +11,7 @@
     <textarea name="sub" placeholder="공지 글을 입력해주세요." cols="30" rows="10"></textarea>
 
     <button class="btn">완료</button>
+    
 
 </section>
 

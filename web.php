@@ -27,6 +27,7 @@ Route::get("/notice", "AdminController@notice");
 Route::get("/notice/view", "AdminController@view");
 
 Route::get("/modify/board", "BoardController@modify");
+Route::get("/modify/notice", "AdminController@noticemodify");
 
 Route::post("/member/delete", "AdminController@deletemember");
 
@@ -38,4 +39,6 @@ Route::post("/like", "BoardController@like");
 Route::post("/unlike", "BoardController@unlike");
 Route::post("/notice/ok", "AdminController@noticeok");
 Route::post("/delete/board", "BoardController@delete");
+Route::post("/delete/notice", "AdminController@noticedelete");
 Route::post("/modify/board/ok", "BoardController@modifyOk");
+Route::post("/modify/notice/ok", "AdminController@noticeModifyOk");

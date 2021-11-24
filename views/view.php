@@ -38,12 +38,13 @@
                 <button class="btn"><a href="/modify/board&idx=<?= $content->idx ?>">수정</a></button>
                 <button class="btn" onclick="deleteBoard()">삭제</button>
             </div>
+            <form action="/delete/board" method="post">
+                <input type="hidden" value="<?= $content->tag ?>" name="tag">
+                <input type="hidden" value="<?= $content->idx ?>" name="idx">
+                <input type="submit" class="dn" id="deleteBtn">
+            </form>
         <?php endif;?>
-        <form action="/delete/board" method="post">
-            <input type="hidden" value="<?= $content->tag ?>" name="tag">
-            <input type="hidden" value="<?= $content->idx ?>" name="idx">
-            <input type="submit" class="dn" id="deleteBtn">
-        </form>
+        
     </div>
 
     <div class="board-right">
