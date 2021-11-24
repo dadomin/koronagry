@@ -26,13 +26,20 @@
 	<title>Korona Gry</title>
 </head>
 <body>
-
-<div class="size">
+		
+<?php
+$today = date("m월 d일");
+$day = date("Y-m-d");
+$y = array("일","월","화","수","목","금","토");
+$d = $y[date('w', strtotime($day))];
+?>
 
 	
 	<!-- header - no login - -->
 	<?php if(isset($_SESSION['user'])) : ?>
 	<nav id="header_nav">
+
+		<span><?= $today ?>(<?= $d ?>)</span>
 		<ul>
 			<li><a href="/profile&id=<?= $user->id ?>"><?= $user->name ?>님(<?= $user->point ?>)</a></li>
 			<li><a href="/logout">로그아웃</a></li>
@@ -41,6 +48,8 @@
 	<?php else : ?>
 
 	<nav id="header_nav">
+		
+		<span><?= $today ?>(<?= $d ?>)</span>
 		<ul>
 			<li><a href="/login">로그인</a></li>
 			<li><a href="/register">회원가입</a></li>
@@ -68,17 +77,22 @@
 	</header>
 	
 	<nav id="header_menu">
-		<ul>
-			<li><a href="/">홈</a></li>
-			<li><a href="/board">게시판</a></li>
-			
-			<?php if(isset($_SESSION['user'])) : ?>
-				<?php if($_SESSION['user']->id == 'admin') : ?>
-					<li><a href="/member">회원관리</a></li>
-					<li><a href="/notice">공지글 쓰기</a></li>
+		<div class="size">
+			<ul>
+				<li><a href="/">홈</a></li>
+				<li><a href="/board">게시판</a></li>
+				
+				<?php if(isset($_SESSION['user'])) : ?>
+					<?php if($_SESSION['user']->id == 'admin') : ?>
+						<li><a href="/member">회원관리</a></li>
+						<li><a href="/write/notice">공지글 쓰기</a></li>
+						<li><a href="/notice">공지글 관리</a></li>
+					<?php endif; ?>
 				<?php endif; ?>
-			<?php endif; ?>
-		</ul>
-		<a href="/my"><i class="far fa-user"></i> 내가 쓴 글 보기</a>
+			</ul>
+			<a href="/my"><i class="far fa-user"></i> 내가 쓴 글 보기</a>
+			</div>
 	</nav>
 	
+
+	<div class="size">

@@ -17,6 +17,8 @@
     <div class="board-right">
         <button class="btn"><a href="/write">글쓰기</a></button>
         <nav>
+            
+            <h1><span>Category</span></h1>
             <ul>
                 <li><a href="/board/category?idx=1">카테고리1</a></li>
                 <li><a href="/board/category?idx=2">카테고리2</a></li>

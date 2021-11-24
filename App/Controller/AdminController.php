@@ -39,7 +39,20 @@ class AdminController extends MasterController {
         DB::msgAndGo("회원 삭제 완료", "/member");
     }
 
-    public function notice()
+    public function notice() {
+        
+        if(!isset($_SESSION['user'])){$user = null;}else {$user = $_SESSION['user'];}
+
+        $sql = "select * from `notice`";
+        $list = DB::fetchAll($sql, []);
+
+        $totalSql = "select count(*) as cnt from `notice`";
+        $total = DB::fetch($totalSql,[])->cnt;
+
+        $this->render("notice", ["user"=>$user, "list"=>$list, "total" => $total]);
+    }
+
+    public function noticewrite()
     {
         if(!isset($_SESSION['user'])){
             DB::msgAndBack("잘못된 접근입니다.");
@@ -51,7 +64,7 @@ class AdminController extends MasterController {
             exit;
         }
 
-        $this->render("notice", ["user" => $user]);
+        $this->render("notice_write", ["user" => $user]);
     }
 
     public function noticeok() 

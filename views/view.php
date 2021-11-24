@@ -33,12 +33,24 @@
             <?php endif; ?>
             
         </div>
-        
+        <?php if($user != null && $user->id == $content->writer) : ?>
+            <div class="view_btns">
+                <button class="btn"><a href="/modify/board&idx=<?= $content->idx ?>">수정</a></button>
+                <button class="btn" onclick="deleteBoard()">삭제</button>
+            </div>
+        <?php endif;?>
+        <form action="/delete/board" method="post">
+            <input type="hidden" value="<?= $content->tag ?>" name="tag">
+            <input type="hidden" value="<?= $content->idx ?>" name="idx">
+            <input type="submit" class="dn" id="deleteBtn">
+        </form>
     </div>
 
     <div class="board-right">
         <button class="btn"><a href="/write">글쓰기</a></button>
         <nav>
+            
+        <h1><span>Category</span></h1>
             <ul>
                 <li><a href="/board/category?idx=1">카테고리1</a></li>
                 <li><a href="/board/category?idx=2">카테고리2</a></li>

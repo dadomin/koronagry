@@ -10,8 +10,10 @@
                 </div>
                 <ul>
                     <?php foreach($day1 as $key => $item ) : ?>
-                        <?php if($key <= 5) : ?>
-                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                        <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
@@ -24,8 +26,10 @@
                 </div>
                 <ul>
                     <?php foreach($day2 as $key => $item ) : ?>
-                        <?php if($key <= 5) : ?>
-                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                        <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
@@ -38,8 +42,10 @@
                 </div>
                 <ul>
                     <?php foreach($day3 as $key => $item ) : ?>
-                        <?php if($key <= 5) : ?>
-                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                        <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
@@ -52,8 +58,10 @@
                 </div>
                 <ul>
                     <?php foreach($day4 as $key => $item ) : ?>
-                        <?php if($key <= 5) : ?>
-                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                        <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
@@ -66,8 +74,10 @@
                 </div>
                 <ul>
                     <?php foreach($day5 as $key => $item ) : ?>
-                        <?php if($key <= 5) : ?>
-                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                        <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
@@ -78,6 +88,8 @@
     <div class="board-right">
         <button class="btn"><a href="/write">글쓰기</a></button>
         <nav>
+            
+        <h1><span>Category</span></h1>
             <ul>
                 <li><a href="/board/category?idx=1">카테고리1</a></li>
                 <li><a href="/board/category?idx=2">카테고리2</a></li>

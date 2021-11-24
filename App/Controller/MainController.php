@@ -15,7 +15,7 @@ class MainController extends MasterController {
 		}
 		date_default_timezone_set('Asia/Seoul');
 
-		$sql = "SELECT count(*) as cnt, a.board_idx as idx, b.title from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
+		$sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
         $today1 = date("Y-m-d 00:00:00");
         $today2 = date("Y-m-d 23:59:59");
         $day1 = DB::fetchAll($sql, [1, $today1, $today2]);
@@ -45,8 +45,10 @@ class MainController extends MasterController {
         $month5 = DB::fetchAll($sql, [5, $month, $today2]);
 		$months = array($month1, $month2, $month3, $month4, $month5);
 		
+		$noticeSql = "select * from `notice`";
+		$notice = DB::fetchAll($noticeSql, []);
 
-        $this->render("main", ["user" => $user, "days" => $days, "weekends" => $weekends, "months" => $months]);
+        $this->render("main", ["user" => $user, "days" => $days, "weekends" => $weekends, "months" => $months, "notice" => $notice]);
 	}
 	
 }

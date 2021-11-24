@@ -1,7 +1,4 @@
 
-<?php
-$today = date("Y . m . d");
-?>
 
 <!-- <nav id="home_menu">
     <ul>
@@ -23,8 +20,10 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($days[0] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -37,8 +36,10 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($days[1] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -51,8 +52,10 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($days[2] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -65,8 +68,10 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($days[3] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -79,8 +84,10 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($days[4] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -98,8 +105,10 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($weekends[0] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -112,8 +121,10 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($weekends[1] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -126,8 +137,11 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($weekends[2] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -140,8 +154,11 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($weekends[3] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -154,8 +171,11 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($weekends[4] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -173,8 +193,11 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($months[0] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -187,8 +210,11 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($months[1] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -201,8 +227,11 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($months[2] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -215,8 +244,11 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($months[3] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
@@ -229,12 +261,33 @@ $today = date("Y . m . d");
             </div>
             <ul>
                 <?php foreach($months[4] as $key => $item ) : ?>
-                    <?php if($key <= 5) : ?>
-                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                    <?php if($key <= 4) : ?>
+                        
+                        <?php 
+                            $date=date_create($item->date);?>
+                    <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
         </div>
+    </div>
+
+    <div class="best_tab">
+            <h2>공지글 <a href="/notice">+ 더보기</a></h2>
+            <div class="best_tab_tag">
+                <ul>
+                    <?php foreach($notice as $item ) : ?>
+                        <?php 
+                            $date=date_create($item->date);?>
+                        <li><a href="/notice/view?idx=<?=$item->idx?>"><p><span class="notice-tag">공지</span><?= $item->title ?><span class="date"><?= date_format($date, "m.d")?></span></p></a></li>
+                        
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <h2>베스트 댓글</h2>
+            <div class="best_tab_tag"></div>
+            <h2>실시간 댓글</h2>
+            <div class="best_tab_tag"></div>
     </div>
 
 </section>

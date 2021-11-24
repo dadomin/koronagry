@@ -1,4 +1,4 @@
-    
+</div>   
     <!-- footer -->
     <footer>
         <div id="footer-copy">
@@ -6,7 +6,7 @@
         </div>
     </footer>
     <!-- // footer -->
-</div>
+
     
 </body>
 </html>

@@ -79,3 +79,10 @@ function regicheck() {
 
     $("input[type='submit']").click();
 }
+
+function deleteBoard() {
+    let confirmflag = confirm("정말로 삭제하시겠습니까?");
+    if(confirmflag) {
+        $("#deleteBtn").click();
+    }
+}
