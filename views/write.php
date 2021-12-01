@@ -6,11 +6,11 @@
     
     <p>카테고리</p>
     <select name="category">
-        <option value="1">카테고리1</option>
-        <option value="2">카테고리2</option>
-        <option value="3">카테고리3</option>
-        <option value="4">카테고리4</option>
-        <option value="5">카테고리5</option>
+        <option <?php if($category == 1) : ?> selected <?php endif; ?> value="1">카테고리1</option>
+        <option <?php if($category == 2) : ?> selected <?php endif; ?> value="2">카테고리2</option>
+        <option <?php if($category == 3) : ?> selected <?php endif; ?> value="3">카테고리3</option>
+        <option <?php if($category == 4) : ?> selected <?php endif; ?> value="4">카테고리4</option>
+        <option <?php if($category == 5) : ?> selected <?php endif; ?> value="5">카테고리5</option>
     </select>
     <p>제목</p>
     <input type="text" placeholder="글의 제목을 입력해주세요." name="title">

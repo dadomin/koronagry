@@ -11,6 +11,11 @@
     <p>이름</p>
     <input type="text" placeholder="이름을 입력해주세요." name="name">
 
+    <p>이메일</p>
+    <div class="email">
+        <input type="text" placeholder="ex) example@000.com"><button disabled class="btn">인증</button>
+    </div>
+
     <p>비밀번호</p>
     <input type="password"  placeholder="비밀번호를 입력해주세요." name="pw">
     

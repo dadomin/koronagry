@@ -86,3 +86,7 @@ function deleteBoard() {
         $("#deleteBtn").click();
     }
 }
+
+function email() {
+    
+}

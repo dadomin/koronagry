@@ -29,6 +29,13 @@ Route::get("/notice/view", "AdminController@view");
 Route::get("/modify/board", "BoardController@modify");
 Route::get("/modify/notice", "AdminController@noticemodify");
 
+Route::get("/comment/like", "BoardController@commentLike");
+Route::get("/rank", "UserController@rank");
+Route::get("/rank/daily", "BoardController@bestDaily");
+Route::get("/rank/weekend", "BoardController@bestWeekend");
+Route::get("/rank/month", "BoardController@bestMonth");
+
+
 Route::post("/member/delete", "AdminController@deletemember");
 
 Route::post("/register/check", "UserController@regicheck");
@@ -42,3 +49,7 @@ Route::post("/delete/board", "BoardController@delete");
 Route::post("/delete/notice", "AdminController@noticedelete");
 Route::post("/modify/board/ok", "BoardController@modifyOk");
 Route::post("/modify/notice/ok", "AdminController@noticeModifyOk");
+
+Route::post("/write/comment", "BoardController@comment");
+
+Route::post("/email", "UserController@email");

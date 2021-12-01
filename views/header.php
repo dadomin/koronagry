@@ -79,8 +79,19 @@ $d = $y[date('w', strtotime($day))];
 	<nav id="header_menu">
 		<div class="size">
 			<ul>
-				<li><a href="/">홈</a></li>
-				<li><a href="/board">게시판</a></li>
+				<li><a href="/"><i class="fas fa-home"></i></a></li>
+				<li><a href="/introduce">소개</a></li>
+				<li><a href="/">리뷰</a></li>
+				<li class="drop-down"><a>베스트글</a>
+					<ul class="drop-menu">
+						<li><a href="/best/daily">일간Best</a></li>
+						<li><a href="/best/weedend">주간Best</a></li>
+						<li><a href="/best/month">월간Best</a></li>
+					</ul>
+				</li>
+				<li><a href="/board">커뮤니티</a></li>
+				<li><a href="/notice">공지사항</a></li>
+				<li><a href="/rank">랭킹</a></li>
 				
 				<?php if(isset($_SESSION['user'])) : ?>
 					<?php if($_SESSION['user']->id == 'admin') : ?>
@@ -91,7 +102,7 @@ $d = $y[date('w', strtotime($day))];
 				<?php endif; ?>
 			</ul>
 			<a href="/my"><i class="far fa-user"></i> 내가 쓴 글 보기</a>
-			</div>
+		</div>
 	</nav>
 	
 

@@ -209,4 +209,34 @@ class UserController extends MasterController {
         DB::msgAndGo("회원정보 수정 성공", "/profile&id=$id");
 
     }
+
+    public function email()
+    {
+        if(!isset($_SESSION['user'])){
+			DB::msgAndBack("잘못된 접근입니다.");
+        }
+
+        $email = $_POST['email'];
+        
+        $isemail = preg_match("/^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/i", $email);
+
+        if(!$isemail) {
+            DB::msgAndBack("올바른 이메일 주소를 입력해주세요");
+            exit;
+        }
+    }
+
+    public function rank()
+    {
+        if(isset($_SESSION['user'])){
+			$user = $_SESSION['user'];
+        }else {
+			$user = null;
+		}
+
+        $sql = "SELECT * FROM `user` order by point desc";
+        $list = DB::fetchAll($sql, []);
+
+        $this->render("rank", ["user"=> $user, "list" => $list]);
+    }
 }

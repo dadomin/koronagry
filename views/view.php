@@ -22,13 +22,13 @@
             <form action="/unlike" method="post">
                 <input type="hidden" name="idx" value="<?= $content->idx ?>">
                 <input type="hidden" name="category" value="<?= $content->tag ?>">
-                <button><b><?=$liked?></b><i class="fas fa-heart"></i><span>추천 취소하기</span></button>
+                <button><b><?=$liked?></b><i class="fas fa-thumbs-up"></i><span>추천 취소하기</span></button>
             </form>
             <?php else : ?>
             <form action="/like" method="post">
                 <input type="hidden" name="category" value="<?= $content->tag ?>">
                 <input type="hidden" name="idx" value="<?= $content->idx ?>">
-                <button><b><?=$liked?></b><i class="far fa-heart"></i><span>추천하기</span></button>
+                <button><b><?=$liked?></b><i class="far fa-thumbs-up"></i><span>추천하기</span></button>
             </form>
             <?php endif; ?>
             
@@ -44,8 +44,31 @@
                 <input type="submit" class="dn" id="deleteBtn">
             </form>
         <?php endif;?>
+
+        <div class="post-comments">
+            <h1><i class="fas fa-comment"></i><span><?= $commentCnt ?></span> Comments</h1>
+            <form action="/write/comment" class="post-comment-input" method="post">
+                <input type="hidden" value="<?=$content->idx?>" name="idx">
+                <textarea name="contents"></textarea>
+                <button type="submit" class="btn">POST</button>
+            </form>
+            <div class="timeline">
+                <?php foreach($comments as $item) : ?>
+                <div class="comment">
+                    <div class="comment-user-name">
+                        <div class="user-img"><img src="<?= $item->img ?>" alt=""></div>
+                        <a href="/profile&id=<?=$item->id?>"><?= $item->name ?></a>
+                        <span><?= $item->date ?></span>
+                    </div>
+                    <p><?= $item->sub?></p>
+                    <button><a href="comment/like?idx=<?=$item->idx?>"><i class="fas fa-heart"></i><span><?= $item->like_cnt ?></span></a></button>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
         
     </div>
+        
 
     <div class="board-right">
         <button class="btn"><a href="/write">글쓰기</a></button>
