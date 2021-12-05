@@ -1,6 +1,9 @@
+<div class="section_top">
+    <h1>내가 작성한 게시물</h1>
+</div>
 <section id="my">
-    <h1 class="tc">내가 작성한 게시물</h1>
-    <div class="line"></div>
+    <h1 class="title"><span>게시물 목록</span><a href="/write">+ 글쓰기</a></h1>
+    
     <div class="board_list">
         <table>
             <tr>

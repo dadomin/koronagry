@@ -1,3 +1,6 @@
+<div class="section_top">
+    <h1><?= $category ?></h1>
+</div>
 <section id="board">
     <div class="board-left">
         <div class="view">
@@ -10,7 +13,10 @@
             </div>
             <p><?= $content->sub ?></p>
             <?php foreach($imgs as $item) : ?>
-                <img src="<?= $item->file_name?>" alt="">
+                <div class="img-box">
+                    <img src="<?= $item->file_name?>" alt="">
+                    <div class="watermark"></div>
+                </div>
             <?php endforeach; ?>
             <?php if($content->youtube != null) : ?>
                 <div class="view_youtube">
@@ -71,7 +77,7 @@
         
 
     <div class="board-right">
-        <button class="btn"><a href="/write">글쓰기</a></button>
+        <!-- <button class="btn"><a href="/write">글쓰기</a></button> -->
         <nav>
             
         <h1><span>Category</span></h1>

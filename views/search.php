@@ -7,9 +7,12 @@
         $tag = "글쓴이"; 
     }
 ?>
+
+<section class="section_top">
+    <h1><?= $tag ?> 검색하기</h1>
+</section>
 <section id="search">
-    <h1 class="tc"><?= $tag ?>에 ' <?= $search ?> ' 를 포함한 검색 결과</h1>
-    <div class="line"></div>
+    <h1 class="title"><span>' <?= $search ?> ' 검색 결과</span></h1>
     <div class="board_list">
         <?php if($list == null) : ?>
             

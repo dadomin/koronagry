@@ -1,7 +1,13 @@
+<div class="section_top">
+    
+    <?php if(isset($_SESSION['user']) && $user->id == $pu->id) : ?>
+        <h1>마이페이지</h1>
+    <?php else : ?>    
+        <h1><?= $pu->name ?>님의 페이지</h1>
+    <?php endif; ?>
+</div>
 <section id="profile">
     <?php if(isset($_SESSION['user']) && $user->id == $pu->id) : ?>
-        <h1 class="tc">마이페이지</h1>
-        <div class="line"></div>
         <div class="profile_img">
             <img src="<?= $user->img ?>" alt="">
         </div>
@@ -29,9 +35,6 @@
         
             
     <?php else : ?>
-
-        <h1 class="tc"><?= $pu->name ?>님의 페이지</h1>
-        <div class="line"></div>
         <div class="profile_img">
             <img src="<?= $pu->img ?>" alt="">
         </div>

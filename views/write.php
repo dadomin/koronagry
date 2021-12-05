@@ -1,9 +1,10 @@
+<section class="section_top">
+    <h1>글쓰기</h1>
+</section>
 <form action="/write/ok" method="post" enctype="multipart/form-data">
     
 <section id="write">
-    <h1>글쓰기</h1>
-    <div class="line"></div>
-    
+    <h1 class="title"><span>글 작성하기</span></h1>
     <p>카테고리</p>
     <select name="category">
         <option <?php if($category == 1) : ?> selected <?php endif; ?> value="1">카테고리1</option>

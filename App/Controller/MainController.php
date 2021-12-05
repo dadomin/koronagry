@@ -15,40 +15,39 @@ class MainController extends MasterController {
 		}
 		date_default_timezone_set('Asia/Seoul');
 
-		$sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
-        $today1 = date("Y-m-d 00:00:00");
-        $today2 = date("Y-m-d 23:59:59");
-        $day1 = DB::fetchAll($sql, [1, $today1, $today2]);
-        $day2 = DB::fetchAll($sql, [2, $today1, $today2]);
-        $day3 = DB::fetchAll($sql, [3, $today1, $today2]);
-        $day4 = DB::fetchAll($sql, [4, $today1, $today2]);
-        $day5 = DB::fetchAll($sql, [5, $today1, $today2]);
-		$days = array($day1, $day2, $day3, $day4, $day5);
-
-		$timestamp = strtotime("-1 week");
-		$weekend = date("Y-M-D 00:00:00", $timestamp);
-
-		$weekend1 = DB::fetchAll($sql, [1, $weekend, $today2]);
-        $weekend2 = DB::fetchAll($sql, [2, $weekend, $today2]);
-        $weekend3 = DB::fetchAll($sql, [3, $weekend, $today2]);
-        $weekend4 = DB::fetchAll($sql, [4, $weekend, $today2]);
-        $weekend5 = DB::fetchAll($sql, [5, $weekend, $today2]);
-		$weekends = array($weekend1, $weekend2, $weekend3, $weekend4, $weekend5);
-
-		$timestamp = strtotime("-1 months");
-		$month = date("Y-M-D 00:00:00", $timestamp);
-
-		$month1 = DB::fetchAll($sql, [1, $month, $today2]);
-        $month2 = DB::fetchAll($sql, [2, $month, $today2]);
-        $month3 = DB::fetchAll($sql, [3, $month, $today2]);
-        $month4 = DB::fetchAll($sql, [4, $month, $today2]);
-        $month5 = DB::fetchAll($sql, [5, $month, $today2]);
-		$months = array($month1, $month2, $month3, $month4, $month5);
+		// $sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
 		
+	
+		// $sql1 = "SELECT * FROM `board_file` a, board b, user c where a.board_idx = b.idx and b.writer = c.id GROUP by a.board_idx order by b.date desc;"
+		// 최신글
+		$recentSql = "SELECT *, (select file_name from board_file where board_idx = a.idx group by board_idx) as img FROM `board` a, `user` b WHERE a.writer = b.id order by a.date desc";
+		$recent = DB::fetchAll($recentSql, []);
+
+		// 댓글 많은 글
+        $replySql = "SELECT count(*) as cnt, b.*,c.*,(select file_name from board_file where board_idx = b.idx group by board_idx) as img FROM `comment` a, `board` b, `user` c where a.board_idx = b.idx and b.writer = c.id GROUP by a.board_idx order by cnt desc";
+		$reply = DB::fetchAll($replySql, []);
+
+		// 사진 글
+		$imgSql = "SELECT a.file_name, b.*, c.* FROM `board_file` a, board b, user c where a.board_idx = b.idx and b.writer = c.id GROUP by a.board_idx order by b.date desc";
+		$img = DB::fetchAll($imgSql, []);
+
+		// 영상 글
+		$videoSql = "SELECT * FROM `board` a, `user` b where a.writer = b.id and a.youtube is not null order by a.date desc";
+		$video = DB::fetchAll($videoSql, []);
+
+		// 베스트 댓글
+		$bestReplySql = "SELECT *, (select count(*) from `comment_like` where comment_idx = a.idx) as cnt FROM `comment` a, `user` b where a.writer = b.id order by cnt desc";
+		$bestReply = DB::fetchAll($bestReplySql, []);
+
+		// 실시간 댓글
+		$liveReplySql = "SELECT *, (select count(*) from `comment_like` where comment_idx = a.idx) as cnt FROM `comment` a, `user` b where a.writer = b.id order by date desc";
+		$liveReply = DB::fetchAll($liveReplySql, []);
+
+		// 공지글
 		$noticeSql = "select * from `notice`";
 		$notice = DB::fetchAll($noticeSql, []);
 
-        $this->render("main", ["user" => $user, "days" => $days, "weekends" => $weekends, "months" => $months, "notice" => $notice]);
+        $this->render("main", ["user" => $user, "recent" => $recent, "reply"=> $reply, "img" => $img, "video" => $video, "bestReply" => $bestReply, "liveReply" => $liveReply,  "notice" => $notice]);
 	}
 	
 }

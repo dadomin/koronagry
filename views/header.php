@@ -24,8 +24,45 @@
 	<script src="/js/jquery-3.3.1.js"></script>
 	<script src="/js/script.js"></script>
 	<title>Korona Gry</title>
+	
+	<script>
+
+		function getCookie(name){
+			var cookie = document.cookie;
+			console.log(cookie);
+			if(document.cookie != "") {
+				var cookie_array = cookie.split(";")
+				for(var index in cookie_array) {
+					var cookie_name = cookie_array[index].split("=");
+					console.log(cookie_name[0]);
+					if(cookie_name[0].trim() == "popupYN"){
+						return cookie_name[1];
+					}
+				}
+			}
+			return;
+		}
+		function openPopup(url) {
+			let cookieCheck = getCookie("popupYN");
+			if(cookieCheck != "N") {
+				$("#popup").show(500);
+			}
+		}
+		function closePopup() {
+			setCookie("popupYN", "N", 1);
+			$("#popup").hide(500);
+		}
+		function setCookie(name, value, expiredays) {
+            var date = new Date();
+            date.setDate(date.getDate() + expiredays);
+            document.cookie = escape(name) + "=" + escape(value) + "; expires=" + date.toUTCString();
+        }
+	
+
+	</script>
+
 </head>
-<body>
+<body onload="javascript:openPopup()">
 		
 <?php
 $today = date("m월 d일");
@@ -34,8 +71,25 @@ $y = array("일","월","화","수","목","금","토");
 $d = $y[date('w', strtotime($day))];
 ?>
 
-	
-	<!-- header - no login - -->
+	<div id="popup">
+		<div class="back"></div>
+		<div class="pop">
+			<h1>공지사항</h1>
+			<p>법적 책임 본인에게 명시 법적 책임 본인에게 명시 법적 책임 본인에게 명시 법적 책임 본인에게 명시 </p>
+			<button onclick="closePopup()">위 내용을 확인하였으며 24시간동안 열람하지 않습니다.</button>
+		</div>
+	</div>
+
+	<?php if(isset($_SESSION['user']) && $user->id == "admin") : ?>
+		<button id="admin-menu">
+			<i class="fas fa-bars"></i>
+			<ul>
+				<li><a href="/member">회원 관리</a></li>
+				<li><a href="/notice">공지글 관리</a></li>
+			</ul>
+		</button>
+	<?php endif; ?>
+
 	<?php if(isset($_SESSION['user'])) : ?>
 	<nav id="header_nav">
 
@@ -85,21 +139,13 @@ $d = $y[date('w', strtotime($day))];
 				<li class="drop-down"><a>베스트글</a>
 					<ul class="drop-menu">
 						<li><a href="/best/daily">일간Best</a></li>
-						<li><a href="/best/weedend">주간Best</a></li>
+						<li><a href="/best/weekend">주간Best</a></li>
 						<li><a href="/best/month">월간Best</a></li>
 					</ul>
 				</li>
 				<li><a href="/board">커뮤니티</a></li>
 				<li><a href="/notice">공지사항</a></li>
 				<li><a href="/rank">랭킹</a></li>
-				
-				<?php if(isset($_SESSION['user'])) : ?>
-					<?php if($_SESSION['user']->id == 'admin') : ?>
-						<li><a href="/member">회원관리</a></li>
-						<li><a href="/write/notice">공지글 쓰기</a></li>
-						<li><a href="/notice">공지글 관리</a></li>
-					<?php endif; ?>
-				<?php endif; ?>
 			</ul>
 			<a href="/my"><i class="far fa-user"></i> 내가 쓴 글 보기</a>
 		</div>

@@ -17,9 +17,11 @@ $n_page = floor($start / $page_scale);
 
 ?>
 
-
+<div class="section_top">
+    <h1>공지사항</h1>
+</div>
 <section id="notice">
-        <h1>공지글</h1>
+        <h1 class="title"><span>공지글 목록</span><a href="/write/notice">+ 추가하기</a></h1>
         <div class="board_list">
             <table>
                 

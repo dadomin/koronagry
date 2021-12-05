@@ -33,10 +33,23 @@ function logincheck() {
     
     $("input[type='submit']").click();
 }
+function checkEmail(str){                                              
+
+    var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+
+    if(!reg_email.test(str)) {                           
+        return false;    
+    } else {                       
+        return true;         
+    }                            
+
+}
+
 
 function regicheck() {
     let id = $("input[name='id'");
     let name = $("input[name='name']");
+    let email = $("input[name='email']");
     let pw = $("input[name='pw']");
     let pwcheck = $("input[name='pwcheck']");
     let file = $("input[name='file']");
@@ -53,6 +66,18 @@ function regicheck() {
         return;
     }
     
+    if(email.val() == ""){
+        alert("이메일 값이 비워져있습니다.");
+        email.focus();
+        return;
+    }else {
+        if(!checkEmail(email.val())) {
+            alert("이메일형식이 잘못되었습니다.");
+            email.focus();
+            return;
+        }
+    }
+
     if(pw.val() == "") {
         alert("비밀번호가 비워져있습니다.");
         pw.focus();

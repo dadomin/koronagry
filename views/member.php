@@ -1,6 +1,8 @@
+<div class="section_top">
+    <h1>회원관리하기</h1>
+</div>
 <section id="member">
-    <h1 class="tc">회원관리</h1>
-    <div class="line"></div>
+    <h1 class="title"><span>회원 목록</span></h1>
 
     <div class="board_list">
         <table>

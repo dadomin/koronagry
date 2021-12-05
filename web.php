@@ -31,10 +31,13 @@ Route::get("/modify/notice", "AdminController@noticemodify");
 
 Route::get("/comment/like", "BoardController@commentLike");
 Route::get("/rank", "UserController@rank");
-Route::get("/rank/daily", "BoardController@bestDaily");
-Route::get("/rank/weekend", "BoardController@bestWeekend");
-Route::get("/rank/month", "BoardController@bestMonth");
+Route::get("/best/daily", "BoardController@bestDaily");
+Route::get("/best/weekend", "BoardController@bestWeekend");
+Route::get("/best/month", "BoardController@bestMonth");
 
+Route::get("/introduce", "CompanyController@all");
+Route::get("/company/add", "CompanyController@add");
+Route::get("/company", "CompanyController@view");
 
 Route::post("/member/delete", "AdminController@deletemember");
 
@@ -53,3 +56,5 @@ Route::post("/modify/notice/ok", "AdminController@noticeModifyOk");
 Route::post("/write/comment", "BoardController@comment");
 
 Route::post("/email", "UserController@email");
+
+Route::post("/company/add/ok", "CompanyController@addOk");

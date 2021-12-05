@@ -1,5 +1,8 @@
+<div class="section_top">
+    <h1>회원별 포인트 랭킹</h1>
+</div>
 <section id="rank">
-    <h1>포인트 랭킹</h1>
+    <h1 class="title"><span>순위별 목록</span></h1>
     <div class="rank-list">
         <?php foreach($list as $item) : ?>
 

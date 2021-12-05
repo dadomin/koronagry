@@ -1,3 +1,6 @@
+<div class="section_top">
+    <h1>공지사항</h1>
+</div>
 <section id="board">
     <div class="board-left">
         <div class="view">
@@ -26,7 +29,7 @@
     </div>
 
     <div class="board-right">
-        <button class="btn"><a href="/write">글쓰기</a></button>
+        <!-- <button class="btn"><a href="/write">글쓰기</a></button> -->
         <nav>
             
             <h1><span>Category</span></h1>

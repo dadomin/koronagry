@@ -84,60 +84,6 @@ class BoardController extends MasterController {
         $this->render("write", ["user" => $user, "category" => $category]);
 
     }
-
-    public function add_watermark_text($image_path, $text, $font) {
-    
-        // $image_path는 반드시 절대경로로 지정해야함 (url이 아닌 path)
-        
-        $array_img_chk = array("jpg", "jpeg", "png", "gif", "bmp");
-        
-        // 이미지 확장자
-        $img_ext = explode(".", strrev($image_path));
-        $img_ext = strrev($img_ext[0]);
-        $img_ext = strtolower($img_ext);
-        
-        // 이미지 파일인 경우에만 진행
-        if(in_array($img_ext, $array_img_chk)) {
-     
-            if($img_ext == 'jpg' || $img_ext == 'jpeg')
-                $create_img = imagecreatefromjpeg($image_path);
-     
-            if($img_ext == 'png')
-                $create_img = imagecreatefrompng($image_path);
-     
-            if($img_ext == 'gif')
-                $create_img = imagecreatefromgif($image_path);
-     
-            if($img_ext == 'bmp')
-                $create_img = imagecreatefromwbmp($image_path);
-     
-            if($create_img) {
-     
-                imagealphablending($create_img, true);
-                
-                // 워터마크 폰트 색상 (RGB 값)
-                $color = imagecolorallocate($create_img, 0, 0, 0);
-                
-                imagettftext($create_img, 20, 0, 2, 20, $color, $font, $text);
-     
-                /* imagettftext 설명 */
-                // 원본 이미지 리소스 : $create_img
-                // 폰트 크기 : 20
-                // 폰트 각도 : 0
-                // 폰트 위치 x : 2
-                // 폰트 위치 y : 20
-                // 텍스트 색상 : $watermark_color (rgb값)
-                // 텍스트 폰트 : $font
-                // 텍스트 내용 : $text
-     
-                //header("Content-type: image/jpeg");
-                imagejpeg($create_img, $image_path);
-     
-                imagedestroy($create_img);
-            }
-        }
-    }
-
     public function writeOk() 
     {
         if(isset($_SESSION['user'])){
@@ -194,13 +140,9 @@ class BoardController extends MasterController {
             $tmp = $_FILES['file']['tmp_name'];
             foreach($tmp as $key => $value) {
                 if($value != null) {
-                    $watermark_text = "Korona Gry";
-                    $watermark_font = "./font/BebasNeue-Regular.ttf";
                     $path = './upload/' .time()."_".$file['name'][$key];
                     move_uploaded_file($value, $path);
-                    
-                    $img_path = $path;
-    
+
                     $sql3 = "INSERT INTO board_file(`file_name`, `board_idx`) VALUES (?, ?)";
                     $cnt3 = DB::query($sql3, [$path, $idx]);
                 }
@@ -270,6 +212,10 @@ class BoardController extends MasterController {
             }
         }
 
+        
+        $categorySql = "SELECT * from tag WHERE `idx` = ?";
+        $category = DB::fetch($categorySql, [$content->tag]);
+
         $commentSql = "SELECT a.*, b.* FROM `comment` a, `user` b WHERE a.board_idx = ? and a.writer = b.id;";
         $comments = DB::fetchAll($commentSql, [$idx]);
 
@@ -277,7 +223,7 @@ class BoardController extends MasterController {
         $commentCnt = DB::fetch($commentCntSql, [$idx])->cnt;
         
 
-        $this->render("view", ["user" => $user, "comments" => $comments, "commentCnt"=>$commentCnt,"content" => $content, "imgs" => $imgs, "liked" => $liked, "views" => $views, "islike" => $islike]);
+        $this->render("view", ["user" => $user, "comments" => $comments,"category"=>$category->name, "commentCnt"=>$commentCnt,"content" => $content, "imgs" => $imgs, "liked" => $liked, "views" => $views, "islike" => $islike]);
     }
 
 
@@ -603,19 +549,85 @@ class BoardController extends MasterController {
     {
         if(!isset($_SESSION['user'])){
             $user = null;
+        }else {
+            $user = $_SESSION['user'];
         }
-        $user = $_SESSION['user'];
-
         
+        
+        date_default_timezone_set('Asia/Seoul');
+        $sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
+        $today1 = date("Y-m-d 00:00:00");
+        $today2 = date("Y-m-d 23:59:59");
+
+        $day1 = DB::fetchAll($sql, [1, $today1, $today2]);
+        $day2 = DB::fetchAll($sql, [2, $today1, $today2]);
+        $day3 = DB::fetchAll($sql, [3, $today1, $today2]);
+        $day4 = DB::fetchAll($sql, [4, $today1, $today2]);
+        $day5 = DB::fetchAll($sql, [5, $today1, $today2]);
+        $list = array($day1, $day2, $day3, $day4, $day5);
+
+        $when = "일간";
+
+        $this->render("best", ["user" => $user, "list" => $list, "when" => $when]);
+
     }
 
     public function bestWeekend()
     {
+        if(!isset($_SESSION['user'])){
+            $user = null;
+        }else {
+            $user = $_SESSION['user'];
+        }
+        
+        
+        date_default_timezone_set('Asia/Seoul');
+        $sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
+       
+        $today2 = date("Y-m-d 23:59:59");
+        
+        $timestamp = strtotime("-1 week");
+        $weekend = date("Y-M-D 00:00:00", $timestamp);
+
+        $weekend1 = DB::fetchAll($sql, [1, $weekend, $today2]);
+        $weekend2 = DB::fetchAll($sql, [2, $weekend, $today2]);
+        $weekend3 = DB::fetchAll($sql, [3, $weekend, $today2]);
+        $weekend4 = DB::fetchAll($sql, [4, $weekend, $today2]);
+        $weekend5 = DB::fetchAll($sql, [5, $weekend, $today2]);
+        $list = array($weekend1, $weekend2, $weekend3, $weekend4, $weekend5);
+
+        $when = "주간";
+
+        $this->render("best", ["user" => $user, "list" => $list, "when" => $when]);
 
     }
 
     public function bestMonth()
     {
+        if(!isset($_SESSION['user'])){
+            $user = null;
+        }else {
 
+            $user = $_SESSION['user'];
+        }
+        
+        date_default_timezone_set('Asia/Seoul');
+        $sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
+        
+        $today2 = date("Y-m-d 23:59:59");
+        
+        $timestamp = strtotime("-1 months");
+        $month = date("Y-M-D 00:00:00", $timestamp);
+    
+        $month1 = DB::fetchAll($sql, [1, $month, $today2]);
+        $month2 = DB::fetchAll($sql, [2, $month, $today2]);
+        $month3 = DB::fetchAll($sql, [3, $month, $today2]);
+        $month4 = DB::fetchAll($sql, [4, $month, $today2]);
+        $month5 = DB::fetchAll($sql, [5, $month, $today2]);
+        $list = array($month1, $month2, $month3, $month4, $month5);
+
+        $when = "월간";
+
+        $this->render("best", ["user" => $user, "list" => $list, "when" => $when]);
     }
 }

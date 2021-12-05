@@ -1,8 +1,11 @@
+
+<section class='section_top'>
+    <h1>글 수정하기</h1>
+</section>
 <form action="/modify/board/ok" method="post" enctype="multipart/form-data">
     
 <section id="write">
-    <h1>수정하기</h1>
-    <div class="line"></div>
+    <h1 class="title"><span>글 세부내용 수정하기</span></h1>
     
     <p>카테고리</p>
     <select name="category">

@@ -1,9 +1,9 @@
-
+<div class="section_top">
+    <h1>회원가입</h1>
+</div>
 <form action="/register/check" method="post" enctype="multipart/form-data">
 <section id="user_form">
-    <h1>회원가입</h1>
-    
-    <div class="line"></div>
+    <h1 class="title"><span>회원 가입하기</span></h1>
 
     <p>아이디</p>
     <input type="text" placeholder="아이디를 입력해주세요." name="id">
@@ -13,7 +13,7 @@
 
     <p>이메일</p>
     <div class="email">
-        <input type="text" placeholder="ex) example@000.com"><button disabled class="btn">인증</button>
+        <input type="text" placeholder="ex) example@000.com" name="email"><button disabled class="btn">인증</button>
     </div>
 
     <p>비밀번호</p>

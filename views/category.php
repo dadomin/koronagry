@@ -16,19 +16,22 @@
     $n_page = floor($start / $page_scale);
 
 ?>
+<div class="section_top">
+    <h1><?=$category?></h1>
+</div>
 <section id="board">
     <div class="board-left">
-        <h1><?= $category ?></h1>
         <div class="best_tab">
 
-            <div class="best_tab_tag">
-                <div class="best_tag_title">
-                    <h2>오늘의 인기글</h2>
+            <div class="best-box">
+                <div class="best-box-title">
+                    <h1 class="title"><span>오늘의 인기글</span></h1>
                 </div>
                 <ul>
                     <?php foreach($best as $key => $item ) : ?>
-                        <?php if($key <= 4) : ?>
-                        <li><a href="/view?idx=<?=$item->idx?>"><span><?=$key+1?></span><p><?= $item->title ?></p></a></li>
+                        
+                        <?php if($key <= 4) : ?>                
+                        <li><a href="/view?idx=<?=$item->idx?>"><p><?=$key+1?></p><b><?= $item->title ?></b><span></span></a></li>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
@@ -36,6 +39,7 @@
         </div>
 
         <div class="board_list">
+            <h1 class="title"><span>게시판</span><a href="/write?category=<?=$tag?>">+ 글쓰기</a></h1>
             <table>
                 
                 <tr>
@@ -83,7 +87,7 @@
 
                 if($n_page > 0) {
                     $p_start = ($n_page -1) * $page_scale;
-                    $link = "<button class='btn'><a href='/list&feeling=".$feeling."&start=${p_start}'>";
+                    $link = "<button class='btn'><a href='/board/category?idx=".$tag."&start=${p_start}'>";
                     $link .= "Prev";
                     $link .= "</a></button>";
                     echo $link." ";
@@ -112,7 +116,7 @@
     </div>
 
     <div class="board-right">
-        <button class="btn"><a href="/write?category=<?=$tag?>">글쓰기</a></button>
+        <!-- <button class="btn"><a href="/write?category=<?=$tag?>">글쓰기</a></button> -->
         <nav>
             <h1><span>Category</span></h1>
             <ul>
