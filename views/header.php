@@ -135,7 +135,7 @@ $d = $y[date('w', strtotime($day))];
 			<ul>
 				<li><a href="/"><i class="fas fa-home"></i></a></li>
 				<li><a href="/introduce">소개</a></li>
-				<li><a href="/">리뷰</a></li>
+				<!-- <li><a href="/review">리뷰</a></li> -->
 				<li class="drop-down"><a>베스트글</a>
 					<ul class="drop-menu">
 						<li><a href="/best/daily">일간Best</a></li>

@@ -110,7 +110,7 @@
     </div>
     <div class="main-right">
        <div class="main-board">
-            <h1 class="title"><span>Notice</span><a href="/notice">더보기</a></h1>
+            <h1 class="title"><span>Notice</span><a href="/notice">+ 더보기</a></h1>
             <ul>
             <?php foreach($notice as $key => $item) : ?>
                 <?php if($key < 7) :?>

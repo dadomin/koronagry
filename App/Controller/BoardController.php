@@ -231,6 +231,7 @@ class BoardController extends MasterController {
     {
         if(!isset($_SESSION['user'])){
 			DB::msgAndBack("잘못된 접근입니다.");
+            exit;
         }
 
         $user = $_SESSION['user'];

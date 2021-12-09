@@ -39,7 +39,7 @@
         </div>
 
         <div class="board_list">
-            <h1 class="title"><span>게시판</span><a href="/write?category=<?=$tag?>">+ 글쓰기</a></h1>
+            <h1 class="title"><span>게시판</span><a href="/write?category=<?=$tag?>" class="bold">+ 글쓰기</a></h1>
             <table>
                 
                 <tr>

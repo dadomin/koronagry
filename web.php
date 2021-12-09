@@ -39,6 +39,7 @@ Route::get("/introduce", "CompanyController@all");
 Route::get("/company/add", "CompanyController@add");
 Route::get("/company", "CompanyController@view");
 
+
 Route::post("/member/delete", "AdminController@deletemember");
 
 Route::post("/register/check", "UserController@regicheck");
@@ -58,3 +59,4 @@ Route::post("/write/comment", "BoardController@comment");
 Route::post("/email", "UserController@email");
 
 Route::post("/company/add/ok", "CompanyController@addOk");
+Route::post("/review/add", "CompanyController@reviewAdd");

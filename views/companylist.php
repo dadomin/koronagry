@@ -3,7 +3,7 @@
 </div>
 <section id="company-list">
 
-    <h1 class="title"><span>업체 목록</span><a href="/company/add">+ 추가하기</a></h1>
+    <h1 class="title"><span>업체 목록</span><a href="/company/add" class="bold">+ 추가하기</a></h1>
 
     <div class="companies">
 
@@ -24,13 +24,29 @@
                     </ul>
                 </div>
                 <div class="company-star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
+                    <?php  if($item->star == null) :  ?>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                    <?php else : ?>
+                        <?php
+                            $i = 1;
+                            while($i<=5){
+                                if($i <= $item->star){
+                                    echo "<i class='fas fa-star'></i>";
+                                }else {
+                                    echo "<i class='far fa-star'></i>";
+                                }
+                                $i++;
+                            }
+                        ?>
+                   <?php endif; ?>
                 </div>
-                <button><a href="/company&idx=<?= $item->idx ?>">Go <i class="fas fa-chevron-right"></i></</a><button>
+                <button>
+                    <a href="/company&idx=<?= $item->idx ?>">Go <i class="fas fa-chevron-right"></i></a>
+                        </button>
             </div>
         <?php endforeach; ?>
     </div>

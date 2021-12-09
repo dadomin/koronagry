@@ -14,7 +14,7 @@ class CompanyController extends MasterController {
 			$user = null;
 		}
 
-        $sql = "SELECT * FROM `company`";
+        $sql = "SELECT *, ROUND(`star_all`/`star_cnt`) as star FROM `company`";
         $list = DB::fetchAll($sql, []);
         $this->render("companylist", ["user" => $user, "list" => $list]);
     }
@@ -83,7 +83,7 @@ class CompanyController extends MasterController {
         }
 
         $idx = $_GET['idx'];
-        $sql = "SELECT * FROM `company` WHERE `idx` = ?";
+        $sql = "SELECT *,ROUND(`star_all`/`star_cnt`, 1) as star FROM `company` WHERE `idx` = ?";
         $company = DB::fetch($sql, [$idx]);
 
         if($company == null) {
@@ -91,7 +91,48 @@ class CompanyController extends MasterController {
             exit;
         }
 
-        $this->render("company", ["user" => $user, "company" => $company]);
+        $reviewSql = "SELECT * FROM `review` a, `user` b WHERE a.company_idx = ? and a.writer = b.id";
+        $review = DB::fetchAll($reviewSql, [$idx]);
+
+        $cntSql = "SELECT count(*) as cnt FROM `review` WHERE company_idx = ?";
+        $cnt = DB::fetch($cntSql, [$idx])->cnt;
+
+        $this->render("company", ["user" => $user, "company" => $company, "review" => $review, "cnt" =>$cnt]);
+    }
+
+    public function reviewAdd()
+    {
+        if(!isset($_SESSION['user'])){
+            DB::msgAndBack("로그인 후 이용해주세요.");
+            exit;
+        }
+        
+        $user = $_SESSION['user'];
+        
+        $company_idx = $_POST['company_idx'];
+        $writer = $user->id;
+        $comment = $_POST['comment'];
+        $star = $_POST['star'];
+
+        if($comment == "") {
+            DB::msgAndBack("평가내용을 입력하세요.");
+            exit;
+        }
+        
+        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $date = $day->format('Y.m.d');
+
+        $insertSql = "INSERT INTO `review`(`company_idx`,`writer`,`comment`,`star`, `date`) VALUES (?,?,?,?,?)";
+        $insertCnt = DB::query($insertSql, [$company_idx,$writer,$comment,$star,$date]);
+
+        $updateSql = "UPDATE `company` SET `star_cnt` = `star_cnt`+1, `star_all` = `star_all` + ? WHERE `idx` = ?";
+        $updateCnt = DB::query($updateSql, [$star, $company_idx]);
+
+        if(!$insertCnt || !$updateCnt) {
+            DB::msgAndBack("DB 오류");
+            exit;
+        }
+        DB::msgAndGo("리뷰 작성 완료", "/company&idx=$company_idx");
     }
 
 

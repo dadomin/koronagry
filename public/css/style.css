@@ -65,7 +65,7 @@ td > a {
     text-align: center;
 }
 
-button.btn {
+.btn {
     background-color: #081547;
     color: #fff;
     border: 1px solid #081547;
@@ -73,13 +73,13 @@ button.btn {
     transition: .4s;
     font-weight: bold;
 }
-button.btn:hover {
+.btn:hover {
     background-color: #fff;
     color: #081547;
 }
 .user-img {
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
@@ -124,6 +124,12 @@ h1.title > a {
     font-weight: 100;
     font-size: 16px;
     float: right;
+}
+h1.title > a.bold {
+    font-weight: bold;
+    border: 1px solid #0f5e8b;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
 /* header */
@@ -1195,7 +1201,71 @@ footer {
     margin: 50px auto;
     padding: 12px 21px;
 }
+.review-write {
+    width: 100%;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+}
+.review-write > div {
+    flex: 8;
+}
+.review-write > button {
+    flex: 1;
+}
+.review-star > select {
+    margin: 0 6px;
+    width: 50px;
+    text-align: right;
+}
+.review-write textarea {
+    resize: none;
+    width: 100%;
+    height: 60px;
+    padding: 12px;
+    border: none;
+    outline: none;
+}
 
+.review-list {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin: 50px auto;
+}
+.review-box {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 30px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+}
+.review-box > .user-img {
+    margin-right: 10px;
+}
+.review-sub > div {
+    color: #ac2d2d;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+.review-name {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+.review-name > span {
+    font-weight: 100;
+    margin-left: 6px;
+    font-size: 12px;
+    color: #777;
+}
+.review-comment {
+    font-size: 16px;
+    line-height: 1.4;
+}
 
 /* 반응형 */
 @media (max-width: 767px) {
