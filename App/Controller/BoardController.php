@@ -13,14 +13,13 @@ class BoardController extends MasterController {
 			$user = null;
 		}
 
-        $sql3 = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
-        $today1 = date("Y-m-d 00:00:00");
-        $today2 = date("Y-m-d 23:59:59");
-        $day1 = DB::fetchAll($sql3, [1, $today1, $today2]);
-        $day2 = DB::fetchAll($sql3, [2, $today1, $today2]);
-        $day3 = DB::fetchAll($sql3, [3, $today1, $today2]);
-        $day4 = DB::fetchAll($sql3, [4, $today1, $today2]);
-        $day5 = DB::fetchAll($sql3, [5, $today1, $today2]);
+        $sql3 = "SELECT * FROM `board` a, `user` b WHERE a.tag = ? and a.writer = b.id order by a.date desc ";
+        
+        $day1 = DB::fetchAll($sql3, [1]);
+        $day2 = DB::fetchAll($sql3, [2]);
+        $day3 = DB::fetchAll($sql3, [3]);
+        $day4 = DB::fetchAll($sql3, [4]);
+        $day5 = DB::fetchAll($sql3, [5]);
 
         $this->render("board_all", ["user" => $user, "day1" => $day1, "day2" => $day2, "day3" => $day3, "day4" => $day4, "day5" => $day5]);
     }
