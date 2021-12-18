@@ -39,6 +39,12 @@ Route::get("/introduce", "CompanyController@all");
 Route::get("/company/add", "CompanyController@add");
 Route::get("/company", "CompanyController@view");
 
+Route::get("/report/board", "BoardController@reportBoard");
+Route::get("/report/comment", "BoardController@reportComment");
+Route::get("/admin/category", "AdminController@category");
+Route::get("/admin/blind", "AdminController@blind");
+Route::get("/admin/show", "AdminController@show");
+Route::get("/admin/report", "AdminController@reportAll");
 
 Route::post("/member/delete", "AdminController@deletemember");
 
@@ -60,3 +66,11 @@ Route::post("/email", "UserController@email");
 
 Route::post("/company/add/ok", "CompanyController@addOk");
 Route::post("/review/add", "CompanyController@reviewAdd");
+
+Route::post("/point", "AdminController@givePoint");
+Route::post("/admin/point", "AdminController@pointLevel");
+
+Route::post("/admin/category/update", "BoardController@categoryUpdate");
+Route::post("/admin/category/delete", "BoardController@categoryDelete");
+
+Route::post("/member/limit", "AdminController@limit");

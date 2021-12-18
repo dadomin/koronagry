@@ -116,15 +116,12 @@
     </div>
 
     <div class="board-right">
-        <!-- <button class="btn"><a href="/write?category=<?=$tag?>">글쓰기</a></button> -->
         <nav>
             <h1><span>Category</span></h1>
             <ul>
-                <li <?php if($tag == 1) :?> class="active" <?php endif; ?>><a href="/board/category?idx=1">카테고리1</a></li>
-                <li <?php if($tag == 2) :?> class="active" <?php endif; ?>><a href="/board/category?idx=2">카테고리2</a></li>
-                <li <?php if($tag == 3) :?> class="active" <?php endif; ?>><a href="/board/category?idx=3">카테고리3</a></li>
-                <li <?php if($tag == 4) :?> class="active" <?php endif; ?>><a href="/board/category?idx=4">카테고리4</a></li>
-                <li <?php if($tag == 5) :?> class="active" <?php endif; ?>><a href="/board/category?idx=5">카테고리5</a></li>
+                <?php foreach($tags as $item) : ?>
+                    <li <?php if($tag == $item->idx) :?> class="active" <?php endif; ?>><a href="/board/category?idx=<?=$item->idx?>"><?=$item->name?></a></li>    
+                <?php endforeach; ?>
             </ul>
         </nav>
     </div>

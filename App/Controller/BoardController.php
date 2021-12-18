@@ -13,15 +13,18 @@ class BoardController extends MasterController {
 			$user = null;
 		}
 
+        $sql = "SELECT * FROM `tag`";
+        $list = DB::fetchAll($sql, []);
         $sql3 = "SELECT * FROM `board` a, `user` b WHERE a.tag = ? and a.writer = b.id order by a.date desc ";
         
-        $day1 = DB::fetchAll($sql3, [1]);
-        $day2 = DB::fetchAll($sql3, [2]);
-        $day3 = DB::fetchAll($sql3, [3]);
-        $day4 = DB::fetchAll($sql3, [4]);
-        $day5 = DB::fetchAll($sql3, [5]);
+        $days = array();
+        foreach($list as $key => $item) {
+            ${"day".$key} = DB::fetchAll($sql3, [$item->idx]);
+            
+            array_push($days, ${"day".$key});
+        }
 
-        $this->render("board_all", ["user" => $user, "day1" => $day1, "day2" => $day2, "day3" => $day3, "day4" => $day4, "day5" => $day5]);
+        $this->render("board_all", ["user" => $user, "days"=>$days, "list" => $list]);
     }
 
     public function category() 
@@ -37,6 +40,8 @@ class BoardController extends MasterController {
             exit;
         }
 
+        $sql = "SELECT * FROM `tag`";
+        $tags = DB::fetchAll($sql, []);
         $category = $_GET['idx'];
         
         $tag = $_GET['idx'];
@@ -59,7 +64,7 @@ class BoardController extends MasterController {
         $cntSql = "SELECT count(*) as cnt from board where `tag` = ?";
         $total = DB::fetch($cntSql, [$category])->cnt;
 
-        $this->render("category", ["user" => $user,"tag" => $tag, "total" => $total, "list" => $cnt1, "category" => $cnt2->name, "best" => $best, "notice" => $notice]);
+        $this->render("category", ["user" => $user,"tag" => $tag,"tags" => $tags, "total" => $total, "list" => $cnt1, "category" => $cnt2->name, "best" => $best, "notice" => $notice]);
     }
 
     public function write()
@@ -72,6 +77,11 @@ class BoardController extends MasterController {
 
         if($user == null) {
             DB::msgAndBack("로그인 후 사용해주세요.");
+            exit;
+        }
+
+        if($user->islimit == 1) {
+            DB::msgAndBack("회원님은 현재 관리자에 의해 활동이 제한되었습니다.");
             exit;
         }
 
@@ -180,9 +190,16 @@ class BoardController extends MasterController {
         
         $idx = $_GET['idx'];
 
+        $tag_sql = "SELECT * FROM `tag`";
+        $tags = DB::fetchAll($tag_sql, []);
         
         $sql = "select a.*, b.name from board a, user b where `idx` = ? and a.writer = b.id";
         $content = DB::fetch($sql, [$idx]);
+
+        if($content == null) {
+            DB::msgAndBack("삭제된 글입니다.");
+            exit;
+        }
 
         $viewSql =  "INSERT INTO `views`(`board_idx`,`date`, `category`) VALUES (?,?,?)";
         
@@ -190,8 +207,6 @@ class BoardController extends MasterController {
         $date = $day->format('Y-m-d');
 
         $cnt = DB::query($viewSql, [$idx, $date, $content->tag]);
-
-
 
         $sql2 = "select `file_name` from board_file where `board_idx`=?";
         $imgs = DB::fetchAll($sql2, [$idx]);
@@ -222,7 +237,7 @@ class BoardController extends MasterController {
         $commentCnt = DB::fetch($commentCntSql, [$idx])->cnt;
         
 
-        $this->render("view", ["user" => $user, "comments" => $comments,"category"=>$category->name, "commentCnt"=>$commentCnt,"content" => $content, "imgs" => $imgs, "liked" => $liked, "views" => $views, "islike" => $islike]);
+        $this->render("view", ["user" => $user, "tags"=>$tags,"comments" => $comments,"category"=>$category->name, "commentCnt"=>$commentCnt,"content" => $content, "imgs" => $imgs, "liked" => $liked, "views" => $views, "islike" => $islike]);
     }
 
 
@@ -234,10 +249,20 @@ class BoardController extends MasterController {
         }
 
         $user = $_SESSION['user'];
-        if($user->point < 30) {
-            DB::msgAndBack("추천하기 위해서는 30점 이상의 포인트가 필요합니다.");
+        $pointSql = "SELECT * FROM `admin`";
+        $point = DB::fetch($pointSql, [])->point_level;
+        if($user->point < $point) {
+            DB::msgAndBack("추천하기 위해서는 $point 점 이상의 포인트가 필요합니다.");
             exit;
         }
+
+        $writer = $_POST['writer'];
+
+        if($user->id == $writer) {
+            DB::msgAndBack("본인 글은 추천할 수 없습니다.");
+            exit;
+        }
+
 
         $idx = $_POST['idx'];
         $tag = $_POST['category'];
@@ -265,6 +290,11 @@ class BoardController extends MasterController {
 
         $user = $_SESSION['user'];
         $idx = $_POST['idx'];
+
+        if($user->id == $writer) {
+            DB::msgAndBack("본인 글은 추천할 수 없습니다.");
+            exit;
+        }
 
         $sql = "DELETE FROM `liked` WHERE `u_id` = ? and `board_idx` = ?";
 
@@ -325,11 +355,13 @@ class BoardController extends MasterController {
 
     public function delete()
     {
-        if(isset($_SESSION['user'])){
-			$user = $_SESSION['user'];
-        }else {
-			$user = null;
-		}
+        if(!isset($_SESSION['user'])){
+			
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+		$user = $_SESSION['user'];
+		
         
         $idx = $_POST['idx'];
         $tag = $_POST['tag'];
@@ -337,7 +369,7 @@ class BoardController extends MasterController {
         $searchSql = "select a.*, b.name from board a, user b where `idx` = ? and a.writer = b.id";
         $searchUser = DB::fetch($searchSql, [$idx]);
 
-        if($user == null || $user->id != $searchUser->writer) {
+        if($user->id != $searchUser->writer && $user->id != "admin") {
             DB::msgAndBack("잘못된 접근입니다.");
             exit;
         }
@@ -489,6 +521,10 @@ class BoardController extends MasterController {
         }
         $user = $_SESSION['user'];
 
+        if($user->islimit == 1) {
+            DB::msgAndBack("회원님은 현재 관리자에 의해 활동이 제한되었습니다.");
+            exit;
+        }
         $idx = $_POST['idx'];
         $contents = trim($_POST['contents']);
         $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
@@ -500,8 +536,17 @@ class BoardController extends MasterController {
             exit;
         }
 
-        $sql = "INSERT INTO comment(`writer`, `sub`,`date`,`board_idx`) VALUES(?,?,?,?)";
-        $result = DB::query($sql, [$user->id, $contents, $date,$idx]);
+        if(isset($_POST['mention'])) {
+
+            $mention = $_POST['mention'];
+            $mention_id = $_POST['mention_id'];
+        }else {
+            $mention = null;
+            $mention_id = null;
+        }
+
+        $sql = "INSERT INTO comment(`writer`, `sub`,`date`,`board_idx`, `mention`, `mention_id`) VALUES(?,?,?,?, ?, ?)";
+        $result = DB::query($sql, [$user->id, $contents, $date,$idx,$mention, $mention_id]);
 
         if(!$result) {
             DB::msgAndBack("댓글쓰기 오류");
@@ -517,11 +562,19 @@ class BoardController extends MasterController {
             exit;
         }
         $user = $_SESSION['user'];
+        $pointSql = "SELECT * FROM `admin`";
+        $point = DB::fetch($pointSql, [])->point_level;
+        if($user->point < $point) {
+            DB::msgAndBack("추천하기 위해서는 $point 점 이상의 포인트가 필요합니다.");
+            exit;
+        }
 
         if(!isset($_GET['idx'])){
             DB::msgAndBack("잘못된 접근입니다.");
             exit;
         }
+
+        
 
         $idx = $_GET['idx'];
 
@@ -559,16 +612,19 @@ class BoardController extends MasterController {
         $today1 = date("Y-m-d 00:00:00");
         $today2 = date("Y-m-d 23:59:59");
 
-        $day1 = DB::fetchAll($sql, [1, $today1, $today2]);
-        $day2 = DB::fetchAll($sql, [2, $today1, $today2]);
-        $day3 = DB::fetchAll($sql, [3, $today1, $today2]);
-        $day4 = DB::fetchAll($sql, [4, $today1, $today2]);
-        $day5 = DB::fetchAll($sql, [5, $today1, $today2]);
-        $list = array($day1, $day2, $day3, $day4, $day5);
+        $tag_sql = "SELECT * FROM `tag`";
+        $tags = DB::fetchAll($tag_sql, []);
+        
+        $list = array();
+        foreach($tags as $key => $item) {
+            ${"day".$key} = DB::fetchAll($sql, [$item->idx, $today1, $today2]);
+            array_push($list, ${"day".$key});
+        }
+
 
         $when = "일간";
 
-        $this->render("best", ["user" => $user, "list" => $list, "when" => $when]);
+        $this->render("best", ["user" => $user, "list" => $list, "when" => $when, "tags" => $tags]);
 
     }
 
@@ -589,16 +645,19 @@ class BoardController extends MasterController {
         $timestamp = strtotime("-1 week");
         $weekend = date("Y-M-D 00:00:00", $timestamp);
 
-        $weekend1 = DB::fetchAll($sql, [1, $weekend, $today2]);
-        $weekend2 = DB::fetchAll($sql, [2, $weekend, $today2]);
-        $weekend3 = DB::fetchAll($sql, [3, $weekend, $today2]);
-        $weekend4 = DB::fetchAll($sql, [4, $weekend, $today2]);
-        $weekend5 = DB::fetchAll($sql, [5, $weekend, $today2]);
-        $list = array($weekend1, $weekend2, $weekend3, $weekend4, $weekend5);
+        $tag_sql = "SELECT * FROM `tag`";
+        $tags = DB::fetchAll($tag_sql, []);
+        
+        $list = array();
+        foreach($tags as $key => $item) {
+            ${"day".$key} = DB::fetchAll($sql, [$item->idx, $weekend, $today2]);
+            array_push($list, ${"day".$key});
+        }
+
 
         $when = "주간";
 
-        $this->render("best", ["user" => $user, "list" => $list, "when" => $when]);
+        $this->render("best", ["user" => $user, "list" => $list, "when" => $when, "tags" => $tags]);
 
     }
 
@@ -618,16 +677,130 @@ class BoardController extends MasterController {
         
         $timestamp = strtotime("-1 months");
         $month = date("Y-M-D 00:00:00", $timestamp);
+
+        $tag_sql = "SELECT * FROM `tag`";
+        $tags = DB::fetchAll($tag_sql, []);
+        
+        $list = array();
+        foreach($tags as $key => $item) {
+            ${"day".$key} = DB::fetchAll($sql, [$item->idx, $month, $today2]);
+            array_push($list, ${"day".$key});
+        }
     
-        $month1 = DB::fetchAll($sql, [1, $month, $today2]);
-        $month2 = DB::fetchAll($sql, [2, $month, $today2]);
-        $month3 = DB::fetchAll($sql, [3, $month, $today2]);
-        $month4 = DB::fetchAll($sql, [4, $month, $today2]);
-        $month5 = DB::fetchAll($sql, [5, $month, $today2]);
-        $list = array($month1, $month2, $month3, $month4, $month5);
 
         $when = "월간";
 
-        $this->render("best", ["user" => $user, "list" => $list, "when" => $when]);
+        $this->render("best", ["user" => $user, "list" => $list, "when" => $when, "tags" => $tags]);
+    }
+
+    public function reportBoard()
+    {
+        if(!isset($_SESSION['user'])){
+            DB::msgAndBack("로그인 후 이용바랍니다.");
+            exit;
+        }
+
+        $user = $_SESSION['user'];
+
+        if(isset($_GET['idx'])){
+            $idx = $_GET['idx'];
+        }else {
+            $idx = null;
+        }
+        
+        if($idx == null || $idx == ""){
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        
+        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $date = $day->format('Y-m-d H:i:s');
+        $sql = "INSERT INTO `report_board`(`board_idx`, `reporter`, `date`) VALUES (?, ?, ?)";
+        $cnt = DB::query($sql, [$idx, $user->id, $date]);
+        
+        if(!$cnt) {
+            DB::msgAndBack("해당 글 신고 실패");
+        }else {
+            DB::msgAndBack("해당 글 신고 성공");
+        }
+    }
+
+    public function reportComment()
+    {
+
+        if(!isset($_SESSION['user'])){
+            DB::msgAndBack("로그인 후 이용바랍니다.");
+            exit;
+        }
+
+        $user = $_SESSION['user'];
+
+        if(isset($_GET['idx'])){
+            $idx = $_GET['idx'];
+        }else {
+            $idx = null;
+        }
+        
+        if($idx == null || $idx == ""){
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        
+        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $date = $day->format('Y-m-d H:i:s');
+        $sql = "INSERT INTO `report_comment`(`comment_idx`, `reporter`, `date`) VALUES (?, ?, ?)";
+        $cnt = DB::query($sql, [$idx, $user->id, $date]);
+        
+        if(!$cnt) {
+            DB::msgAndBack("해당 댓글 신고 실패");
+        }else {
+            DB::msgAndBack("해당 댓글 신고 성공");
+        }
+    }
+
+    public function categoryUpdate()
+    {
+        if(!isset($_SESSION['user'])){
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        $user = $_SESSION['user'];
+        if($user->id != 'admin') {
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+
+        $idx = $_POST['idx'];
+        $name = $_POST['name'];
+        $sql = "UPDATE `tag` SET `name`= ? where `idx` = ?";
+        $cnt = DB::query($sql, [$name, $idx]);
+        if(!$cnt){
+            DB::msgAndBack("카테고리 제목 수정에 실패하였습니다.");
+            exit;
+        }
+        DB::msgAndBack("카테고리 제목 수정 완료");
+    }
+
+    public function categoryDelete()
+    {
+        if(!isset($_SESSION['user'])){
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        $user = $_SESSION['user'];
+        if($user->id != 'admin') {
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        $idx = $_POST['idx'];
+        $tag_sql = "DELETE FROM `tag` WHERE `idx`= ?";
+        $board_sql = "DELETE FROM `board` where `tag` = ?";
+        $tag_cnt = DB::query($tag_sql,[$idx]);
+        $board_cnt = DB::query($board_sql, [$idx]);
+        if(!$tag_cnt || !$board_cnt){
+            DB::msgAndBack("카테고리 삭제가 실패하였습니다.");
+            exit;
+        }
+        DB::msgAndBack("카테고리 삭제 완료");
     }
 }

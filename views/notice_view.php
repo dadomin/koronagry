@@ -34,11 +34,9 @@
             
             <h1><span>Category</span></h1>
             <ul>
-                <li><a href="/board/category?idx=1">카테고리1</a></li>
-                <li><a href="/board/category?idx=2">카테고리2</a></li>
-                <li><a href="/board/category?idx=3">카테고리3</a></li>
-                <li><a href="/board/category?idx=4">카테고리4</a></li>
-                <li><a href="/board/category?idx=5">카테고리5</a></li>
+                <?php foreach($tags as $item) : ?>
+                    <li><a href="/board/category?idx=<?=$item->idx?>"><?=$item->name?></a></li>    
+                <?php endforeach; ?>
             </ul>
         </nav>
     </div>

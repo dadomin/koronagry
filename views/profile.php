@@ -53,6 +53,10 @@
                 <input type="hidden" name="id" value="<?=$pu->id?>">
                 <button class='btn'>강제 퇴장</button>
             </form>
+            <form action="/member/limit" method="post">
+                <input type="hidden" name="id" value="<?=$pu->id?>">
+                <button class='btn'>활동 제한</button>
+            </form>
         <?php endif; ?>
 
     <?php endif; ?>
