@@ -21,7 +21,9 @@ class AdminController extends MasterController {
         $sql = "select * from `user`";
         $list = DB::fetchAll($sql, []);
         $pointSql = "select * from `admin`";
-        $point = DB::fetch($pointSql, [])->point_level;
+        $point = DB::fetch($pointSql, []);
+
+
         $this->render("member", ["user" => $user, "list" => $list,"point"=>$point]);
     }
 
@@ -218,16 +220,31 @@ class AdminController extends MasterController {
             exit;
         }
 
-        foreach($ids as $id){
-            $sql = "update `user` set `point` =`point`+ ? where `id` = ?";
-            $cnt = DB::query($sql, [$point, $id]);
-            if(!$cnt) {
-                DB::msgAndGo("포인트 지급 중 오류 발생", "/member");
-                exit;
+        $way = $_POST['way'];
+
+        if($way == "plus") {
+            foreach($ids as $id){
+                $sql = "update `user` set `point` =`point`+ ? where `id` = ?";
+                $cnt = DB::query($sql, [$point, $id]);
+                if(!$cnt) {
+                    DB::msgAndGo("포인트 지급 중 오류 발생", "/member");
+                    exit;
+                }
+            }
+        }else {
+            foreach($ids as $id){
+                $sql = "update `user` set `point` =`point`- ? where `id` = ?";
+                $cnt = DB::query($sql, [$point, $id]);
+                if(!$cnt) {
+                    DB::msgAndGo("포인트 회수 중 오류 발생", "/member");
+                    exit;
+                }
             }
         }
 
-        DB::msgAndGo("포인트 지급 완료", "/member");
+        
+
+        DB::goPage("/member");
     }
 
     public function pointLevel()
@@ -257,6 +274,39 @@ class AdminController extends MasterController {
 
         if(!$cnt){
             DB::msgAndBack("좋아요 기능 포인트 점수 조정 중 오류 발생");
+            exit;
+        }
+
+        DB::msgAndGo("레벨 조정을 완료하였습니다.", "/member");
+    }
+
+    public function levelGrade()
+    {
+        if(!isset($_SESSION['user'])){
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        $user = $_SESSION['user'];
+        if($user->id != 'admin') {
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        if(isset($_POST['grade'])){
+            $grade = $_POST['grade'];
+        }else {
+            $grade = null;
+        }
+
+        if($grade == null || $grade == 0){
+            DB::msgAndBack("변경할 포인트 점수를 입력해주세요.");
+            exit;
+        }
+
+        $sql = "UPDATE `admin` SET `level_grade` = ? where 1";
+        $cnt = DB::query($sql, [$grade]);
+
+        if(!$cnt){
+            DB::msgAndBack("레벨당 포인트 기준 점수 조정 중 오류 발생");
             exit;
         }
 
@@ -371,6 +421,28 @@ class AdminController extends MasterController {
         DB::msgAndGo("활동제한 처리 완료", "/member");
     }
 
+    public function limit_none()
+    {
+        if(!isset($_SESSION['user'])){
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        $user = $_SESSION['user'];
+        if($user->id != 'admin') {
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+
+        $id = $_POST['id'];
+        $sql = "UPDATE `user` SET `islimit` = 0 WHERE id = ?";
+        $cnt = DB::query($sql, [$id]);
+        if(!$cnt) {
+            DB::msgAndBack("오류 발생");
+            exit;
+        }
+        DB::msgAndGo("활동제한 해제 처리 완료", "/member");
+    }
+
     public function reportAll()
     {
         if(!isset($_SESSION['user'])){
@@ -390,4 +462,5 @@ class AdminController extends MasterController {
 
         $this->render("report", ["user" => $user, "board" => $board, "comment" => $comment]);
     }
+
 }

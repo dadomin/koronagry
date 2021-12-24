@@ -6,11 +6,18 @@
         <h1><?= $pu->name ?>님의 페이지</h1>
     <?php endif; ?>
 </div>
+
 <section id="profile">
+    
+<?php if($pu->islimit) : ?>
+    <p class="warning"><i class="fas fa-exclamation-triangle"></i> 현재 활동 정지가 되어있는 회원입니다.</p>
+<?php endif; ?>
     <?php if(isset($_SESSION['user']) && $user->id == $pu->id) : ?>
         <div class="profile_img">
             <img src="<?= $user->img ?>" alt="">
+            
         </div>
+
         
         <form action="/profile/change" method="post" enctype="multipart/form-data">
             <p>프로필 이미지 바꾸기</p>
@@ -53,10 +60,17 @@
                 <input type="hidden" name="id" value="<?=$pu->id?>">
                 <button class='btn'>강제 퇴장</button>
             </form>
-            <form action="/member/limit" method="post">
-                <input type="hidden" name="id" value="<?=$pu->id?>">
-                <button class='btn'>활동 제한</button>
-            </form>
+            <?php if($pu->islimit) : ?>
+                <form action="/member/limit-none" method="post">
+                    <input type="hidden" name="id" value="<?=$pu->id?>">
+                    <button class='btn'>활동 제한 해제</button>
+                </form>
+            <?php else : ?>
+                <form action="/member/limit" method="post">
+                    <input type="hidden" name="id" value="<?=$pu->id?>">
+                    <button class='btn'>활동 제한</button>
+                </form>
+            <?php endif; ?>
         <?php endif; ?>
 
     <?php endif; ?>

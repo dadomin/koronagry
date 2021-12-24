@@ -76,6 +76,8 @@
         <div class="post-comments">
             <h1><i class="fas fa-comment"></i><span><?= $commentCnt ?></span> Comments</h1>
             <form action="/write/comment" class="post-comment-input" method="post">
+            
+                <input type="hidden" name="point" value="0" class="rp">
                 <input type="hidden" value="<?=$content->idx?>" name="idx">
                 <textarea name="contents"></textarea>
                 <button type="submit" class="btn">POST</button>
@@ -85,7 +87,8 @@
                 <div class="comment">
                     <div class="comment-user-name">
                         <div class="user-img"><img src="<?= $item->img ?>" alt=""></div>
-                        <p>L.<?=$item->point?></p>
+                        <!-- <p>P.<?=floor($item->point / $point->level_grade)?></p> -->
+                        <img src="./img/level/<?=floor($item->point / $point->level_grade)?>.gif" alt="" style="margin-right: 5px;">
                         <a href="/profile&id=<?=$item->id?>"><?= $item->name ?></a>
                         <?php if($content->writer == $item->id) : ?>
                             <b>작성자</b>
@@ -103,6 +106,7 @@
                         <input type="hidden" name="mention" value="<?=$item->writer?>">
                         <input type="hidden" name="mention_id" value="<?=$item->name?>">
                         <input type="hidden" value="<?=$content->idx?>" name="idx">
+                        <input type="hidden" name="point" value="0" class="rp">
                         <textarea name="contents"></textarea>
                         <button type="submit" class="btn">POST</button>
                     </form>
@@ -116,6 +120,23 @@
         $(".mention").on("click", (e)=>{
             $(e.target.parentNode).children("input").attr("checked", "checked");
         });
+
+        function randomPoint() {
+            
+            let rparr = document.getElementsByClassName("rp");
+            for(let i = 0; i < rparr.length; i++){
+                
+                let rp = Math.floor(Math.random() * 30);
+                
+                rparr[i].value = rp;
+                
+            }
+            
+        }
+        randomPoint();
+        // rparr.forEach(x=>
+        //     console.log(x);
+        // );
     </script>
         
 

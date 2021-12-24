@@ -937,6 +937,10 @@ footer {
     height: 45px;
     font-size: 18px;
 }
+.warning {
+    color: rgb(180, 6, 6);
+    /* text-align: center; */
+}
 
 /* my */
 #my {
@@ -987,6 +991,9 @@ footer {
 }
 #member_top > form > h2 {
     font-size: 18px;
+}
+#member_top > form > select {
+    margin-left: 10px;
 }
 #member_top > form > input {
     width: 100px;

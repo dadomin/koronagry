@@ -236,8 +236,11 @@ class BoardController extends MasterController {
         $commentCntSql = "SELECT count(*) as cnt FROM `comment` WHERE `board_idx` =?";
         $commentCnt = DB::fetch($commentCntSql, [$idx])->cnt;
         
+        
+        $pointSql = "select * from `admin`";
+        $point = DB::fetch($pointSql, []);
 
-        $this->render("view", ["user" => $user, "tags"=>$tags,"comments" => $comments,"category"=>$category->name, "commentCnt"=>$commentCnt,"content" => $content, "imgs" => $imgs, "liked" => $liked, "views" => $views, "islike" => $islike]);
+        $this->render("view", ["user" => $user, "tags"=>$tags,"comments" => $comments,"category"=>$category->name, "commentCnt"=>$commentCnt,"content" => $content, "imgs" => $imgs, "liked" => $liked, "views" => $views, "islike" => $islike, "point" => $point]);
     }
 
 
@@ -544,9 +547,14 @@ class BoardController extends MasterController {
             $mention = null;
             $mention_id = null;
         }
+        
 
         $sql = "INSERT INTO comment(`writer`, `sub`,`date`,`board_idx`, `mention`, `mention_id`) VALUES(?,?,?,?, ?, ?)";
         $result = DB::query($sql, [$user->id, $contents, $date,$idx,$mention, $mention_id]);
+        
+        $point = $_POST['point'];
+        $pointSql = "UPDATE `user` SET `point` = `point` + ? WHERE `id`=?";
+        $pointCnt = DB::query($pointSql, [$point, $user->id]);
 
         if(!$result) {
             DB::msgAndBack("댓글쓰기 오류");

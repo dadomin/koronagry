@@ -74,3 +74,5 @@ Route::post("/admin/category/update", "BoardController@categoryUpdate");
 Route::post("/admin/category/delete", "BoardController@categoryDelete");
 
 Route::post("/member/limit", "AdminController@limit");
+Route::post("/member/limit-none", "AdminController@limit_none");
+Route::post("/admin/level", "AdminController@levelGrade");

@@ -70,4 +70,18 @@ class DB {
 		$con = self::getDB();
 		return $con->lastInsertId();
 	}
+
+	public static function goBack() {
+		echo "<script>";
+		echo "history.back();";
+		echo "</script>";
+	}
+
+	public static function goPage($link) {
+		echo "<script>";
+		echo "location.href = '$link';";
+		echo "</script>";
+	
+	}
+
 }

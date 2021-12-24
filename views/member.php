@@ -7,9 +7,13 @@
     <div id="member_top">
         
         <form action="/point" method="post">
-            <h2>포인트 지급하기</h2>
-            <input type="number" placeholder="지급 포인트" name="point">
-            <button class='btn'>지급하기</button>
+            <h2>포인트 </h2>
+            <select name="way" id="">
+                <option value="plus">지급하기</option>
+                <option value="minus">회수하기</option>
+            </select>
+            <input type="number" placeholder="포인트 입력" name="point">
+            <button class='btn'>실행</button>
             
             <div class="dn">
             <?php foreach($list as $item) : ?>
@@ -25,8 +29,14 @@
 
         <form action="/admin/point" method="post">
             <h2>좋아요 기능</h2>
-            <input type="number" value="<?=$point?>" name="point">
+            <input type="number" value="<?=$point->point_level?>" name="point">
             <button class='btn'>변경하기</button>
+        </form>
+
+        <form action="/admin/level" method="post">
+            <h2>등급당 포인트</h2>
+            <input type="number" name="grade" value="<?=$point->level_grade?>">
+            <button class="btn">변경하기</button>
         </form>
     </div>
 
