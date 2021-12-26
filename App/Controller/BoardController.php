@@ -35,13 +35,18 @@ class BoardController extends MasterController {
 			$user = null;
 		}
 
-        if(!isset($_GET['idx']) || $_GET['idx'] > 5 || $_GET['idx'] < 1) {
+        $count_sql = "SELECT * FROM `tag` ORDER BY `idx` DESC LIMIT 1";
+        $count = DB::fetch($count_sql, [])->idx;
+
+        if(!isset($_GET['idx']) || $_GET['idx'] > $count || $_GET['idx'] < 1) {
             DB::msgAndBack("잘못된 접근입니다.");
+            // echo mysqli_num_rows($tags);
             exit;
         }
-
+        
         $sql = "SELECT * FROM `tag`";
         $tags = DB::fetchAll($sql, []);
+
         $category = $_GET['idx'];
         
         $tag = $_GET['idx'];
@@ -90,7 +95,10 @@ class BoardController extends MasterController {
             $category = $_GET['category'];
         }
 
-        $this->render("write", ["user" => $user, "category" => $category]);
+        $list_sql = "SELECT * FROM `tag`";
+        $list = DB::fetchAll($list_sql, []);
+
+        $this->render("write", ["user" => $user, "category" => $category, "list" => $list]);
 
     }
     public function writeOk() 
@@ -810,5 +818,26 @@ class BoardController extends MasterController {
             exit;
         }
         DB::msgAndBack("카테고리 삭제 완료");
+    }
+
+    public function categoryAdd()
+    {
+        if(!isset($_SESSION['user'])){
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        $user = $_SESSION['user'];
+        if($user->id != 'admin') {
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        $name = $_POST['name'];
+        $tag_sql = "INSERT INTO`tag`(`name`) VALUES (?)";
+        $tag_cnt = DB::query($tag_sql, [$name]);
+        if(!$tag_cnt){
+            DB::msgAndBack("카테고리 추가가 실패하였습니다.");
+            exit;
+        }
+        DB::msgAndBack("카테고리 추가 완료");
     }
 }

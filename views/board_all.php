@@ -9,7 +9,7 @@
             <?php for($i =0; $i < count($days); $i++) : ?>
                 <div class="best-box">
                     <div class="best-box-title">
-                        <h1 class="title"><span><a href="/board/category?idx=<?=$list[$i]->idx?>"><?=$list[$i]->name?></a></span><a href="/write?category=1" class="bold">+ 글쓰기</a></h1>
+                        <h1 class="title"><span><a href="/board/category?idx=<?=$list[$i]->idx?>"><?=$list[$i]->name?></a></span><a href="/write?category=<?=$list[$i]->idx?>" class="bold">+ 글쓰기</a></h1>
                     
                     </div>
                     <ul>

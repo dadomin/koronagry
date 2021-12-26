@@ -7,11 +7,9 @@
     <h1 class="title"><span>글 작성하기</span></h1>
     <p>카테고리</p>
     <select name="category">
-        <option <?php if($category == 1) : ?> selected <?php endif; ?> value="1">카테고리1</option>
-        <option <?php if($category == 2) : ?> selected <?php endif; ?> value="2">카테고리2</option>
-        <option <?php if($category == 3) : ?> selected <?php endif; ?> value="3">카테고리3</option>
-        <option <?php if($category == 4) : ?> selected <?php endif; ?> value="4">카테고리4</option>
-        <option <?php if($category == 5) : ?> selected <?php endif; ?> value="5">카테고리5</option>
+        <?php foreach($list as $item) : ?>
+            <option <?php if($category == $item->idx) : ?> selected <?php endif; ?> value="<?=$item->idx?>"><?=$item->name?></option>
+        <?php endforeach; ?>
     </select>
     <p>제목</p>
     <input type="text" placeholder="글의 제목을 입력해주세요." name="title">
