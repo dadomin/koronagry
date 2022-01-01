@@ -4,7 +4,9 @@
 <section id="member">
     <h1 class="title"><span>회원 목록</span></h1>
 
-    <div id="member_top">
+    <div class="member_top">
+        
+
         
         <form action="/point" method="post">
             <h2>포인트 </h2>
@@ -25,18 +27,6 @@
             <?php endforeach; ?>
             
             </div>
-        </form>
-
-        <form action="/admin/point" method="post">
-            <h2>좋아요 기능</h2>
-            <input type="number" value="<?=$point->point_level?>" name="point">
-            <button class='btn'>변경하기</button>
-        </form>
-
-        <form action="/admin/level" method="post">
-            <h2>등급당 포인트</h2>
-            <input type="number" name="grade" value="<?=$point->level_grade?>">
-            <button class="btn">변경하기</button>
         </form>
     </div>
 

@@ -974,37 +974,40 @@ footer {
     height: 100%;
 }
 
-#member_top {
+.member_top {
     width: 100%;
     height: auto;
     margin-bottom: 30px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    flex-wrap: wrap;
 }
-#member_top > form {
-    flex: 1;
+.member_top > form {
+    /* flex: 1; */
+    width: 50%;
+    height: 50px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
-#member_top > form > h2 {
+.member_top > form > h2 {
     font-size: 18px;
 }
-#member_top > form > select {
+.member_top > form > select {
     margin-left: 10px;
 }
-#member_top > form > input {
+.member_top > form > input {
     width: 100px;
     margin: 0 20px;
     text-align: right;
     padding: 0 5px;
 }
-#admin > #member_top > form > input {
+#admin > .member_top > form > input {
     width: 200px;
 }
-#member_top > form > .btn {
+.member_top > form > .btn {
     padding: 4px 6px;
 }
 

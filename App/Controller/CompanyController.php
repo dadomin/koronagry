@@ -63,7 +63,7 @@ class CompanyController extends MasterController {
         $cnt = DB::query($sql, [$name, $address, $sub_address, $info, $path]);
 
         if($cnt) {
-            DB::msgAndGo("업체 추가가 완료되었습니다.", "/introduce");
+            DB::goPage("/introduce");
         }else {
             DB::msgAndBack("업체 추가 작업 중 오류 발생");
         }
@@ -132,7 +132,7 @@ class CompanyController extends MasterController {
             DB::msgAndBack("DB 오류");
             exit;
         }
-        DB::msgAndGo("리뷰 작성 완료", "/company&idx=$company_idx");
+        DB::goPage("/company&idx=$company_idx");
     }
 
 

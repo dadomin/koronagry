@@ -4,7 +4,7 @@
 
 <section id="admin">
     <h1 class="title"><span>카테고리 목록</span></h1>
-    <div id="member_top">
+    <div class="member_top">
         <form action="/admin/category/add" method="post">
             <h2>카테고리 추가하기</h2>
             <input type="text" name="name" placeholder="카테고리 이름을 입력해주세요.">

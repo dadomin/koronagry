@@ -88,6 +88,7 @@ $d = $y[date('w', strtotime($day))];
 				<li><a href="/notice">공지글 관리</a></li>
 				<li><a href="/admin/category">게시판 관리</a></li>
 				<li><a href="/admin/report">신고 관리</a></li>
+				<li><a href="/admin/point">포인트 관리</a></li>
 			</ul>
 		</button>
 	<?php endif; ?>

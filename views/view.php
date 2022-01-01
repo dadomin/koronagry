@@ -87,8 +87,18 @@
                 <div class="comment">
                     <div class="comment-user-name">
                         <div class="user-img"><img src="<?= $item->img ?>" alt=""></div>
-                        <!-- <p>P.<?=floor($item->point / $point->level_grade)?></p> -->
-                        <img src="./img/level/<?=floor($item->point / $point->level_grade)?>.gif" alt="" style="margin-right: 5px;">
+                        <?php if($item->id == "admin") : ?>
+                            <img src='./img/level/sp.gif' alt=''style='margin-right: 5px;'>
+                        <?php else: ?>
+                        <?php foreach($level as $l) : ?>
+                            <?php if($item->point <= $l->point) : ?>
+                                <img src='./img/level/<?=$l->level - 1?>.gif' alt=''style='margin-right: 5px;'>
+                            <?php break; endif; ?>
+                        <?php endforeach; ?>
+                        <?php endif;?>
+                        <?php if($item->point >= end($level)->level) : ?>
+                            <img src='./img/level/<?=end($level)->level?>.gif' alt=''style='margin-right: 5px;'>
+                        <?php endif; ?>
                         <a href="/profile&id=<?=$item->id?>"><?= $item->name ?></a>
                         <?php if($content->writer == $item->id) : ?>
                             <b>작성자</b>
@@ -134,14 +144,11 @@
             
         }
         randomPoint();
-        // rparr.forEach(x=>
-        //     console.log(x);
-        // );
+
     </script>
         
 
     <div class="board-right">
-        <!-- <button class="btn"><a href="/write">글쓰기</a></button> -->
         <nav>
             
         <h1><span>Category</span></h1>

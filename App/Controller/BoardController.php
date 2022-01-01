@@ -40,7 +40,6 @@ class BoardController extends MasterController {
 
         if(!isset($_GET['idx']) || $_GET['idx'] > $count || $_GET['idx'] < 1) {
             DB::msgAndBack("잘못된 접근입니다.");
-            // echo mysqli_num_rows($tags);
             exit;
         }
         
@@ -169,14 +168,16 @@ class BoardController extends MasterController {
 
         $pointsql = "UPDATE `user` SET `point` = ? WHERE `id` = ?";
         $point = $user->point;
-        $point += 10;
+       
+        $pointSql2 = "SELECT * FROM `admin`";
+        $point += DB::fetch($pointSql2, [])->write_up;
 
         $pointcnt = DB::query($pointsql, [$point, $user->id]);
         
         $user = DB::fetch($usersql, [$user->id]);
         $_SESSION['user'] = $user;
         
-        DB::msgAndGo("글 추가 성공","/view?idx=".$idx);
+        DB::goPage("/view?idx=".$idx);
 
     }
     
@@ -248,7 +249,16 @@ class BoardController extends MasterController {
         $pointSql = "select * from `admin`";
         $point = DB::fetch($pointSql, []);
 
-        $this->render("view", ["user" => $user, "tags"=>$tags,"comments" => $comments,"category"=>$category->name, "commentCnt"=>$commentCnt,"content" => $content, "imgs" => $imgs, "liked" => $liked, "views" => $views, "islike" => $islike, "point" => $point]);
+        $searchSql = "SELECT * from board a, user b where a.idx = ? and a.writer = b.id";
+        $search = DB::fetch($searchSql, [$idx]);
+        $updatePoint = "update `user` set `point` = ? where `id` = ?";
+        $up = $point->view_up + $search->point;
+        $updatecnt = DB::query($updatePoint, [$up, $search->id]);
+
+        $levelSql = "SELECT * FROM `level`";
+        $level = DB::fetchAll($levelSql,[]);
+
+        $this->render("view", ["user" => $user,"level"=>$level, "tags"=>$tags,"comments" => $comments,"category"=>$category->name, "commentCnt"=>$commentCnt,"content" => $content, "imgs" => $imgs, "liked" => $liked, "views" => $views, "islike" => $islike, "point" => $point]);
     }
 
 
@@ -287,9 +297,20 @@ class BoardController extends MasterController {
 
         if(!$cnt) {
             DB::msgAndBack("좋아요 실패");
-        }else {
-            DB::msgAndGo("좋아요 성공", "/view?idx=$idx");
+            exit;
         }
+
+        $pointSql = "select * from `admin`";
+        $point = DB::fetch($pointSql, []);
+
+        $searchSql = "SELECT * from board a, user b where a.idx = ? and a.writer = b.id";
+        $search = DB::fetch($searchSql, [$idx]);
+        $updatePoint = "update `user` set `point` = ? where `id` = ?";
+        $up = $point->like_up + $search->point;
+        $updatecnt = DB::query($updatePoint, [$up, $search->id]);
+
+        DB::goPage("/view?idx=$idx");
+        
 
     }
 
@@ -302,6 +323,9 @@ class BoardController extends MasterController {
         $user = $_SESSION['user'];
         $idx = $_POST['idx'];
 
+     
+        $writer = $_POST['writer'];
+
         if($user->id == $writer) {
             DB::msgAndBack("본인 글은 추천할 수 없습니다.");
             exit;
@@ -313,9 +337,10 @@ class BoardController extends MasterController {
 
         if(!$cnt) {
             DB::msgAndBack("좋아요 취소 실패");
-        }else {
-            DB::msgAndGo("좋아요 취소 성공", "/view?idx=$idx");
+            exit;
         }
+        DB::goPage("/view?idx=$idx");
+        
 
     }
 
@@ -520,7 +545,7 @@ class BoardController extends MasterController {
             }
         }
 
-        DB::msgAndGo("수정 완료", "/view?idx=$idx");
+        DB::goPage("/view?idx=$idx");
 
     }
 
@@ -568,7 +593,7 @@ class BoardController extends MasterController {
             DB::msgAndBack("댓글쓰기 오류");
             exit;
         }
-        DB::msgAndGo("댓글 쓰기 완료", "/view?idx=$idx");
+        DB::goPage("/view?idx=$idx");
     }
 
     public function commentLike()
@@ -794,7 +819,7 @@ class BoardController extends MasterController {
             DB::msgAndBack("카테고리 제목 수정에 실패하였습니다.");
             exit;
         }
-        DB::msgAndBack("카테고리 제목 수정 완료");
+        DB::goBack();
     }
 
     public function categoryDelete()
@@ -817,7 +842,7 @@ class BoardController extends MasterController {
             DB::msgAndBack("카테고리 삭제가 실패하였습니다.");
             exit;
         }
-        DB::msgAndBack("카테고리 삭제 완료");
+        DB::goBack();
     }
 
     public function categoryAdd()
@@ -838,6 +863,6 @@ class BoardController extends MasterController {
             DB::msgAndBack("카테고리 추가가 실패하였습니다.");
             exit;
         }
-        DB::msgAndBack("카테고리 추가 완료");
+        DB::goBack();
     }
 }

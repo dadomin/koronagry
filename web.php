@@ -45,6 +45,7 @@ Route::get("/admin/category", "AdminController@category");
 Route::get("/admin/blind", "AdminController@blind");
 Route::get("/admin/show", "AdminController@show");
 Route::get("/admin/report", "AdminController@reportAll");
+Route::get("/admin/point", "AdminController@point");
 
 Route::post("/member/delete", "AdminController@deletemember");
 
@@ -77,3 +78,14 @@ Route::post("/admin/category/add", "BoardController@categoryAdd");
 Route::post("/member/limit", "AdminController@limit");
 Route::post("/member/limit-none", "AdminController@limit_none");
 Route::post("/admin/level", "AdminController@levelGrade");
+
+Route::post("/admin/point/register", "AdminController@registerPoint");
+Route::post("/admin/point/login", "AdminController@loginPoint");
+Route::post("/admin/point/write", "AdminController@writePoint");
+Route::post("/admin/point/view", "AdminController@viewPoint");
+Route::post("/admin/point/like", "AdminController@likePoint");
+Route::post("/admin/level/max", "AdminController@levelMax");
+Route::post("/admin/level/modify", "AdminController@levelModify");
+
+// dump file 추가
+Route::get("/test", "AdminController@test");

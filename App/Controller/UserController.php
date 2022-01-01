@@ -44,13 +44,14 @@ class UserController extends MasterController {
 
         $sql2 = "UPDATE `user` SET `point` = ? WHERE `id` = ?";
         $point = $user->point;
-        $point += 10;
+        $pointSql = "SELECT * FROM `admin`";
+        $point += DB::fetch($pointSql, [])->login_up;
         $cnt = DB::query($sql2, [$point, $id]);
 
         $user = DB::fetch($sql, [$id, $pw]);
         $_SESSION['user'] = $user;
 
-        DB::msgAndGo("{$user->name}님 로그인되었습니다.", "/");
+        DB::goPage("/");
 
     }
     public function logout() 
@@ -62,7 +63,7 @@ class UserController extends MasterController {
         }
 
         unset($_SESSION['user']);
-        DB::msgAndGo("로그아웃 되었습니다.", "/");
+        DB::goPage("/");
     }
 
     public function register()
@@ -120,7 +121,8 @@ class UserController extends MasterController {
         $path = './profile/' . time() . "_" . $file['name'];
         move_uploaded_file($tmp, $path);
 
-        $point = 30;
+        $pointSql = "select * from admin";
+        $point = DB::fetch($pointSql, [])->register_up;
         
         $sql3 = "INSERT INTO user(`name`, `id`,`pw`, `img`, `point`) VALUES (?, ?, ?, ?, ?)";
         $cnt3 = DB::query($sql3, [$name, $id, $pass, $path, $point]);
@@ -206,7 +208,7 @@ class UserController extends MasterController {
         
         $_SESSION['user'] = $user;
 
-        DB::msgAndGo("회원정보 수정 성공", "/profile&id=$id");
+        DB::goPage("/profile&id=$id");
 
     }
 
