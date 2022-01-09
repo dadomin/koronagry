@@ -771,6 +771,10 @@ footer {
     word-break: break-all;
     border-bottom: 1px solid #aaa;
 }
+.board_list > table tr th {
+    font-size: 12px;
+    /* color: #fff; */
+}
 .board_list > table tr:not(:first-child):hover {
     cursor: pointer;
     background-color: #efefef;
@@ -832,20 +836,25 @@ footer {
     font-weight: 100;
     font-size: 16px;
     word-break: break-all;
-    width: 90%;
+    
 }
 .view_title > div >h2 > span {
     margin-left: 20px;
 }
+.view_title > div > h2 > span > i {
+    font-size: 12px;
+    margin-right: 5px;
+    color: #333;
+}
 .view_title >div> p {
-    width: 10%;
+    /* width: 10%; */
     text-align: center;
     font-size: 14px;
 }
-.view_title > div > p > span {
-    font-weight: bold;
-    color: #678983;
+.view_title > div > p > span >i {
+    margin-right: 5px;
 }
+
 .view > p {
     margin: 30px 20px 100px 20px;
     font-size: 18px;
@@ -1089,7 +1098,17 @@ footer {
 .comment > p > span {
     color: #36a9eb;
     margin-right: 4px;
-
+}
+.comment > p.point {
+    font-size: 12px;
+}
+.comment > p.point > i {
+    margin-right: 5px;
+}
+.comment > p.point > span {
+    margin-left: 10px;
+    font-weight: bold;
+    color: #f00;
 }
 .comment-user-name > span {
     color: #777;

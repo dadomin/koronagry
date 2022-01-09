@@ -277,7 +277,7 @@ class AdminController extends MasterController {
             exit;
         }
 
-        DB::goPage("레벨 조정을 완료하였습니다.", "/member");
+        DB::goPage("레벨 조정을 완료하였습니다.", "/admin/point");
     }
 
     public function levelGrade()
@@ -482,7 +482,7 @@ class AdminController extends MasterController {
         }
 
         if($point == null || $point == 0){
-            DB::msgAndGo("포인트 점수를 입력해주세요.", "member");
+            DB::msgAndGo("포인트 점수를 입력해주세요.", "/admin/point");
             exit;
         }
 
@@ -494,7 +494,7 @@ class AdminController extends MasterController {
             exit;
         }
 
-        DB::goPage("/member");
+        DB::goPage("/admin/point");
     }
 
     public function loginPoint()
@@ -515,7 +515,7 @@ class AdminController extends MasterController {
         }
 
         if($point == null || $point == 0){
-            DB::msgAndGo("포인트 점수를 입력해주세요.", "/member");
+            DB::msgAndGo("포인트 점수를 입력해주세요.", "/admin/point");
             exit;
         }
 
@@ -527,7 +527,7 @@ class AdminController extends MasterController {
             exit;
         }
 
-        DB::goPage("/member");
+        DB::goPage("/admin/point");
     }
 
     public function writePoint()
@@ -548,7 +548,7 @@ class AdminController extends MasterController {
         }
 
         if($point == null || $point == 0){
-            DB::msgAndGo("포인트 점수를 입력해주세요.", "/member");
+            DB::msgAndGo("포인트 점수를 입력해주세요.", "/admin/point");
             exit;
         }
 
@@ -560,7 +560,7 @@ class AdminController extends MasterController {
             exit;
         }
 
-        DB::goPage("/member");
+        DB::goPage("/admin/point");
     }
 
     public function viewPoint()
@@ -581,7 +581,7 @@ class AdminController extends MasterController {
         }
 
         if($point == null || $point == 0){
-            DB::msgAndGo("포인트 점수를 입력해주세요.", "/member");
+            DB::msgAndGo("포인트 점수를 입력해주세요.", "/admin/point");
             exit;
         }
 
@@ -593,7 +593,7 @@ class AdminController extends MasterController {
             exit;
         }
 
-        DB::goPage("/member");
+        DB::goPage("/admin/point");
     }
 
     public function likePoint()
@@ -614,7 +614,7 @@ class AdminController extends MasterController {
         }
 
         if($point == null || $point == 0){
-            DB::msgAndGo("포인트 점수를 입력해주세요.", "/member");
+            DB::msgAndGo("포인트 점수를 입력해주세요.", "/admin/point");
             exit;
         }
 
@@ -626,7 +626,7 @@ class AdminController extends MasterController {
             exit;
         }
 
-        DB::goPage("/member");
+        DB::goPage("/admin/point");
     }
 
     public function point()
@@ -669,7 +669,7 @@ class AdminController extends MasterController {
         }
 
         if($level == null || $level == 0){
-            DB::msgAndGo("최고 레벨을 입력해주세요.", "member");
+            DB::msgAndGo("최고 레벨을 입력해주세요.", "/admin/point");
             exit;
         }
 

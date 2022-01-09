@@ -50,7 +50,7 @@ class BoardController extends MasterController {
         
         $tag = $_GET['idx'];
 
-        $sql1 = "SELECT a.*, b.name from board a, user b where a.`tag` = ? and b.`id` = a.`writer`";
+        $sql1 = "SELECT a.*, b.name, (select count(*) from `liked` c where c.board_idx = a.idx) as like_cnt, (select count(*) from `views` d where d.board_idx = a.idx) as view_cnt from board a, user b where a.`tag` = ? and b.`id` = a.`writer`";
         $cnt1 = DB::fetchAll($sql1, [$category]);
 
         $sql2 = "SELECT * from tag WHERE `idx` = ?";
@@ -202,7 +202,7 @@ class BoardController extends MasterController {
         $tag_sql = "SELECT * FROM `tag`";
         $tags = DB::fetchAll($tag_sql, []);
         
-        $sql = "select a.*, b.name from board a, user b where `idx` = ? and a.writer = b.id";
+        $sql = "select a.*, b.* from board a, user b where `idx` = ? and a.writer = b.id";
         $content = DB::fetch($sql, [$idx]);
 
         if($content == null) {
@@ -581,11 +581,11 @@ class BoardController extends MasterController {
             $mention_id = null;
         }
         
-
-        $sql = "INSERT INTO comment(`writer`, `sub`,`date`,`board_idx`, `mention`, `mention_id`) VALUES(?,?,?,?, ?, ?)";
-        $result = DB::query($sql, [$user->id, $contents, $date,$idx,$mention, $mention_id]);
-        
         $point = $_POST['point'];
+
+        $sql = "INSERT INTO comment(`writer`, `sub`,`date`,`board_idx`, `mention`, `mention_id`,`c_point`) VALUES(?,?,?,?, ?, ?,?)";
+        $result = DB::query($sql, [$user->id, $contents, $date,$idx,$mention, $mention_id,$point]);
+        
         $pointSql = "UPDATE `user` SET `point` = `point` + ? WHERE `id`=?";
         $pointCnt = DB::query($pointSql, [$point, $user->id]);
 

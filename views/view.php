@@ -7,8 +7,19 @@
             <div class="view_title">
                 <h1><?= $content->title?></h1>
                 <div>
-                    <h2><a href="/profile&id=<?=$content->writer?>"><?= $content->name ?></a><span><?= $content->date?></span><a href="/report/board?idx=<?=$content->idx?>" class="report"><i class="far fa-lightbulb"></i>신고</a></h2>
-                    <p>조회 <span><?=$views?></span></p>
+                    <h2>
+                        <?php if($content->writer == "admin") : ?>
+                            <img src='./img/level/sp.gif' alt=''style='margin-right: 5px;'>
+                        <?php elseif($content->point >= end($level)->point) : ?>
+                            <img src='./img/level/<?=end($level)->level?>.gif' alt=''style='margin-right: 5px;'>
+                        <?php else: ?>
+                        <?php foreach($level as $l) : ?>
+                            <?php if($content->point <= $l->point) : ?>
+                                <img src='./img/level/<?=$l->level - 1?>.gif' alt=''style='margin-right: 5px;'>
+                            <?php break; endif; ?>
+                        <?php endforeach; ?>
+                        <?php endif;?><a href="/profile&id=<?=$content->writer?>"><?= $content->name ?></a><span><i class="fas fa-comment"></i><?= $commentCnt ?></span><span><i class="far fa-eye"></i><?=$views?></span><span><i class="fas fa-thumbs-up"></i><?=$liked?></span><a href="/report/board?idx=<?=$content->idx?>" class="report"><i class="far fa-lightbulb"></i>신고</a></h2>
+                    <p><span><i class="far fa-clock"></i><?=$content->date?></span></p>
                 </div>
             </div>
 
@@ -89,6 +100,8 @@
                         <div class="user-img"><img src="<?= $item->img ?>" alt=""></div>
                         <?php if($item->id == "admin") : ?>
                             <img src='./img/level/sp.gif' alt=''style='margin-right: 5px;'>
+                        <?php elseif($item->point >= end($level)->point) : ?>
+                            <img src='./img/level/<?=end($level)->level?>.gif' alt=''style='margin-right: 5px;'>
                         <?php else: ?>
                         <?php foreach($level as $l) : ?>
                             <?php if($item->point <= $l->point) : ?>
@@ -96,9 +109,6 @@
                             <?php break; endif; ?>
                         <?php endforeach; ?>
                         <?php endif;?>
-                        <?php if($item->point >= end($level)->level) : ?>
-                            <img src='./img/level/<?=end($level)->level?>.gif' alt=''style='margin-right: 5px;'>
-                        <?php endif; ?>
                         <a href="/profile&id=<?=$item->id?>"><?= $item->name ?></a>
                         <?php if($content->writer == $item->id) : ?>
                             <b>작성자</b>
@@ -108,6 +118,9 @@
                         
                     </div>
                     <p><?php if($item->mention != "") : ?><span>@<?=$item->mention?></span><?php endif; ?><?= $item->sub?></p>
+                    <?php if($item->c_point > 0) : ?>
+                    <p class="point"><i class="fas fa-gift"></i>축하합니다! <span><?=$item->c_point?></span>포인트를 선물받으셨습니다!</p>
+                    <?php endif; ?>
                     <button><a href="comment/like?idx=<?=$item->idx?>"><i class="fas fa-heart"></i><span><?= $item->like_cnt ?></span></a></button>
                 
                     <button class="mention">답글달기</button>
@@ -136,7 +149,10 @@
             let rparr = document.getElementsByClassName("rp");
             for(let i = 0; i < rparr.length; i++){
                 
-                let rp = Math.floor(Math.random() * 30);
+                let rp = Math.floor(Math.random() * 2);
+                if(rp != 0) {
+                    rp = Math.floor(Math.random() * (100000 - 1000 + 1)) + 1000;
+                }
                 
                 rparr[i].value = rp;
                 

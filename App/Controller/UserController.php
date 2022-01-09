@@ -239,6 +239,9 @@ class UserController extends MasterController {
         $sql = "SELECT * FROM `user` order by point desc";
         $list = DB::fetchAll($sql, []);
 
-        $this->render("rank", ["user"=> $user, "list" => $list]);
+        
+        $levelSql = "SELECT * FROM `level`";
+        $level = DB::fetchAll($levelSql,[]);
+        $this->render("rank", ["user"=> $user, "list" => $list, "level" => $level]);
     }
 }

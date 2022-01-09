@@ -43,9 +43,11 @@
             <table>
                 
                 <tr>
-                    <th width="54%">제목</th>
+                    <th width="50%">제목</th>
                     <th width="10%">작성자</th>
-                    <th width="30%">작성일</th>
+                    <th width="20%">작성일</th>
+                    <th width="7%">조회수</th>
+                    <th width="7%">추천수</th>
                 </tr>
                 <?php foreach($notice as $item) : ?>
                     <tr class="notice" onclick="location.href='/notice/view?idx=<?=$item->idx?>'" style="cursor:pointer;">
@@ -54,6 +56,8 @@
                         <?php 
                             $date=date_create($item->date);?>
                         <td class="tc"><?= date_format($date, "Y.m.d")?></td>
+                        <td class="tc">-</td>
+                        <td class="tc">-</td>
                     </tr>
                 <?php endforeach; ?>
                 <?php 
@@ -71,6 +75,8 @@
                     <?php 
                         $date=date_create($item->date);?>
                     <td class="tc"><?= date_format($date, "Y.m.d")?></td>
+                    <td class="tc"><?= $item->view_cnt?></td>
+                    <td class="tc"><?=$item->like_cnt?></td>
                 </tr>
 
                 <?php 
