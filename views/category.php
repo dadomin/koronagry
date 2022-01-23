@@ -64,6 +64,7 @@
                     $list = array_reverse($list);
                     $cnt = count($list);
                     $a = 1;
+                    
                     foreach($list as $item) : 
                     
                     $n = $scale*($start+1) - $total;
@@ -83,10 +84,25 @@
                     endif;
                     $a++;
                     $cnt--;
+                    
                     endforeach; ?>
             </table>
 
+            <form action="/category/search" method="get" class="search_box_center" >
+                <input type="text" name="idx" class="dn" value="<?=$tag?>">
+                <div class="search_box">
+                    <select name="search_tag" id="search_tag">
+                        <option value="title">제목</option>
+                        <option value="writer">작성자</option>
+                        <option value="sub">내용</option>
+                    </select>
+                    <input type="text" name="contain">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+
             <div class="list-page-btns">
+                
             
                 <?php
 
@@ -118,6 +134,8 @@
 
                 ?>
             </div>
+
+            
         </div>
     </div>
 

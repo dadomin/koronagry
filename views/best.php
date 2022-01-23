@@ -7,7 +7,7 @@
     <?php for($i =0; $i < count($list); $i++) : ?>
         <div class="best-box">
             <div class="best-box-title">
-                <h1 class="title"><span><a href="/board/category?idx=<?=$tags[$i]->idx?>"><?=$tags[$i]->name?></a></span><a href="/write?category=<?=$tags[$i]->idx?>" class="bold">+ 글쓰기</a></h1>
+                <h1 class="title"><span><a href="/board/category?idx=<?=$tags[$i]->idx?>"><?=$tags[$i]->name?></a></span></h1>
             
             </div>
             <ul>

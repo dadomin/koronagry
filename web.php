@@ -47,6 +47,9 @@ Route::get("/admin/show", "AdminController@show");
 Route::get("/admin/report", "AdminController@reportAll");
 Route::get("/admin/point", "AdminController@point");
 
+Route::get("/introduce/search", "CompanyController@search");
+Route::get("/category/search", "BoardController@category_search");
+
 Route::post("/member/delete", "AdminController@deletemember");
 
 Route::post("/register/check", "UserController@regicheck");

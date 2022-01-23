@@ -16,7 +16,10 @@ class CompanyController extends MasterController {
 
         $sql = "SELECT *, ROUND(`star_all`/`star_cnt`) as star FROM `company`";
         $list = DB::fetchAll($sql, []);
-        $this->render("companylist", ["user" => $user, "list" => $list]);
+
+        $totalSql = "SELECT count(*) as cnt FROM `company`";
+        $total = DB::fetch($totalSql,[])->cnt;
+        $this->render("companylist", ["user" => $user, "list" => $list, "total" => $total]);
     }
 
     public function add()
@@ -26,6 +29,10 @@ class CompanyController extends MasterController {
             exit;
         }
         $user = $_SESSION['user'];
+        if($user->id != 'admin') {
+            DB::msgAndBack("관리자만 업체 추가가 가능합니다.");
+            exit;
+        }
 
         $this->render("companyadd", ["user" => $user]);
     }
@@ -118,8 +125,15 @@ class CompanyController extends MasterController {
             DB::msgAndBack("평가내용을 입력하세요.");
             exit;
         }
+
+        $searchSql = "SELECT count(*) as cnt FROM `review` WHERE `writer` = ? and `company_idx` = ?";
+        $searchCnt = DB::fetch($searchSql, [$writer, $company_idx])->cnt;
+        if($searchCnt != 0) {
+            DB::msgAndBack("이미 이 업체에 리뷰를 등록하였습니다.");
+            exit;
+        }
         
-        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $day = new \DateTime('now', new \DateTimeZone('+0800'));
         $date = $day->format('Y.m.d');
 
         $insertSql = "INSERT INTO `review`(`company_idx`,`writer`,`comment`,`star`, `date`) VALUES (?,?,?,?,?)";
@@ -133,6 +147,36 @@ class CompanyController extends MasterController {
             exit;
         }
         DB::goPage("/company&idx=$company_idx");
+    }
+
+    public function search() 
+    {
+        if(isset($_SESSION['user'])){
+			$user = $_SESSION['user'];
+        }else {
+			$user = null;
+		}
+
+        $tag = $_GET['tag'];
+        if(!isset($_GET['contain'])) {
+            DB::msgAndBack("검색어를 입력해주세요.");
+            exit;
+        }
+        $contain = $_GET['contain'];
+        if($contain == null || $contain == "") {
+            DB::msgAndBack("검색어를 입력해주세요.");
+            exit;
+        }
+
+        $sql = "SELECT *, ROUND(`star_all`/`star_cnt`) as star FROM `company` where $tag like '%$contain%'";
+        $list = DB::fetchAll($sql, []);
+        if(!$list) {
+            $list = null;
+        }
+        $totalSql = "SELECT count(*) as cnt FROM `company` where $tag like '%$contain%'";
+        $total = DB::fetch($totalSql,[])->cnt;
+        $this->render("companylist_search", ["user" => $user, "list" => $list, "total" => $total, "tag" => $tag, "contain" => $contain]);
+        
     }
 
 

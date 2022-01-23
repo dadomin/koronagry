@@ -115,7 +115,7 @@ class BoardController extends MasterController {
         $title = trim($_POST['title']);
         $tag = $_POST['category'];
         $sub = trim($_POST['sub']);
-        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $day = new \DateTime('now', new \DateTimeZone('+0800'));
         $date = $day->format('Y-m-d H:i:s');
         $writer = $user->id;
         
@@ -212,7 +212,7 @@ class BoardController extends MasterController {
 
         $viewSql =  "INSERT INTO `views`(`board_idx`,`date`, `category`) VALUES (?,?,?)";
         
-        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $day = new \DateTime('now', new \DateTimeZone('+0800'));
         $date = $day->format('Y-m-d');
 
         $cnt = DB::query($viewSql, [$idx, $date, $content->tag]);
@@ -290,7 +290,7 @@ class BoardController extends MasterController {
 
         $sql = "INSERT INTO `liked`(`u_id`, `board_idx`, `date`, `category`) VALUES (?,?,?,?)";
         
-        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $day = new \DateTime('now', new \DateTimeZone('+0800'));
         $date = $day->format('Y-m-d');
 
         $cnt = DB::query($sql, [$user->id, $idx, $date, $tag]);
@@ -563,7 +563,7 @@ class BoardController extends MasterController {
         }
         $idx = $_POST['idx'];
         $contents = trim($_POST['contents']);
-        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $day = new \DateTime('now', new \DateTimeZone('+0800'));
         $date = $day->format('Y-m-d H:i:s');
 
         // 공백 체크
@@ -648,7 +648,7 @@ class BoardController extends MasterController {
         }
         
         
-        date_default_timezone_set('Asia/Seoul');
+        date_default_timezone_set('Asia/Shanghai');
         $sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
         $today1 = date("Y-m-d 00:00:00");
         $today2 = date("Y-m-d 23:59:59");
@@ -678,7 +678,7 @@ class BoardController extends MasterController {
         }
         
         
-        date_default_timezone_set('Asia/Seoul');
+        date_default_timezone_set('Asia/Shanghai');
         $sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
        
         $today2 = date("Y-m-d 23:59:59");
@@ -711,7 +711,7 @@ class BoardController extends MasterController {
             $user = $_SESSION['user'];
         }
         
-        date_default_timezone_set('Asia/Seoul');
+        date_default_timezone_set('Asia/Shanghai');
         $sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
         
         $today2 = date("Y-m-d 23:59:59");
@@ -753,8 +753,19 @@ class BoardController extends MasterController {
             DB::msgAndBack("잘못된 접근입니다.");
             exit;
         }
+
+        $searchSql = "SELECT * FROM `board` WHERE idx = ?";
+        $searchCnt = DB::fetch($searchSql, [$idx]);
+        if(!$searchCnt) {
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
+        if($user->id == $searchCnt->writer) {
+            DB::msgAndBack("본인 글은 신고할 수 없습니다.");
+            exit;
+        }
         
-        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $day = new \DateTime('now', new \DateTimeZone('+0800'));
         $date = $day->format('Y-m-d H:i:s');
         $sql = "INSERT INTO `report_board`(`board_idx`, `reporter`, `date`) VALUES (?, ?, ?)";
         $cnt = DB::query($sql, [$idx, $user->id, $date]);
@@ -787,7 +798,7 @@ class BoardController extends MasterController {
             exit;
         }
         
-        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $day = new \DateTime('now', new \DateTimeZone('+0800'));
         $date = $day->format('Y-m-d H:i:s');
         $sql = "INSERT INTO `report_comment`(`comment_idx`, `reporter`, `date`) VALUES (?, ?, ?)";
         $cnt = DB::query($sql, [$idx, $user->id, $date]);
@@ -864,5 +875,60 @@ class BoardController extends MasterController {
             exit;
         }
         DB::goBack();
+    }
+
+    public function category_search()
+    {
+        if(isset($_SESSION['user'])){
+			$user = $_SESSION['user'];
+        }else {
+			$user = null;
+		}
+
+        if(!isset($_GET['contain'])) {
+            DB::msgAndBack("검색어를 입력해주세요.");
+            exit;
+        }
+        if(!isset($_GET['search_tag']) || !isset($_GET['contain'])){
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        
+        }
+        
+        $tag = $_GET['idx'];
+        $search_tag = $_GET['search_tag'];
+        $contain = $_GET['contain'];
+        if($contain == null || $contain == "") {
+            DB::msgAndBack("검색어를 입력해주세요.");
+            exit;
+        }
+
+        if($search_tag == "writer") $search_tag = "name";
+        $sql = "SELECT a.*, b.name, (select count(*) from `liked` c where c.board_idx = a.idx) as like_cnt, (select count(*) from `views` d where d.board_idx = a.idx) as view_cnt from board a, user b where a.`tag` = ? and b.`id` = a.`writer` and $search_tag like '%$contain%'";
+        
+
+        $list = DB::fetchAll($sql, [$tag]);
+        if(!$list) {
+            $list = null;
+        }
+
+        $totalSql = "SELECT count(*) as cnt FROM `board` a, `user` b where a.`tag` = ? and b.`id` = a.`writer` and $search_tag like '%$contain%'";
+        $total = DB::fetch($totalSql,[$tag])->cnt;
+
+        $sql2 = "SELECT * from `tag` WHERE `idx` = ?";
+        $cnt2 = DB::fetch($sql2, [$tag]);
+
+        $sql3 = "SELECT count(*) as cnt, a.board_idx as idx, b.title from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
+        $today1 = date("Y-m-d 00:00:00");
+        $today2 = date("Y-m-d 23:59:59");
+        $best = DB::fetchAll($sql3, [$tag, $today1, $today2]);
+        
+        $tag_sql = "SELECT * FROM `tag`";
+        $tags = DB::fetchAll($tag_sql, []);
+        $noticesql = "select * from `notice`";
+        $notice = DB::fetchAll($noticesql, []);
+
+        $this->render("category_search", ["user" => $user,"search_tag"=>$search_tag,"notice"=>$notice,"tags" => $tags, "category"=>$cnt2->name,"best"=>$best,"tag" => $tag, "total"=>$total,"contain" => $contain,"list"=>$list]);
+
     }
 }

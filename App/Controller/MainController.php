@@ -13,7 +13,7 @@ class MainController extends MasterController {
         }else {
 			$user = null;
 		}
-		date_default_timezone_set('Asia/Seoul');
+		date_default_timezone_set('Asia/Shanghai');
 
 		// $sql = "SELECT count(*) as cnt, a.board_idx as idx, b.* from `views` a, `board` b where `category` = ? and a.board_idx = b.idx and a.date BETWEEN ? AND ? GROUP BY board_idx order by cnt desc";
 		

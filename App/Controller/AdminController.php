@@ -38,6 +38,12 @@ class AdminController extends MasterController {
             exit;
         }
         $id = $_POST['id'];
+        $sql1 = "delete from `board` where `writer` = ?";
+        $cnt1 = DB::query($sql1, [$id]);
+        $sql2 = "delete from `comment` where `writer` = ?"
+        $cnt2 = DB::query($sql2, [$id]);
+        $sql3 = "DELETE FROM `review` WHERE `writer` = ?"
+        $cnt3 = DB::query($sql3, [$id]);
         $sql = "delete from `user` where id = ?";
         $list = DB::query($sql, [$id]);
         DB::msgAndGo("회원 삭제 완료", "/member");
@@ -85,7 +91,7 @@ class AdminController extends MasterController {
 
         $title = $_POST['title'];
         $sub = $_POST['sub'];
-        $day = new \DateTime('now', new \DateTimeZone('Asia/Seoul'));
+        $day = new \DateTime('now', new \DateTimeZone('+0800'));
         $date = $day->format('Y-m-d H:i:s');
 
         $sql = "insert into `notice`(`title`, `sub`, `date`) values(?,?,?)";

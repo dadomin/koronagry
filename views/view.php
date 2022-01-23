@@ -5,7 +5,12 @@
     <div class="board-left">
         <div class="view">
             <div class="view_title">
-                <h1><?= $content->title?></h1>
+                
+                <?php if($content->blind == 0) : ?>
+                    <h1><?= $content->title?></h1>
+                <?php else : ?>
+                    <h1>블라인드 처리된 글입니다.</h1>
+                <?php endif; ?>
                 <div>
                     <h2>
                         <?php if($content->writer == "admin") : ?>
@@ -24,6 +29,12 @@
             </div>
 
             <?php if($content->blind == 0) : ?>
+                
+            <?php if($content->youtube != null) : ?>
+                <div class="view_youtube">
+                    <iframe width="854" height="480" src="https://www.youtube.com/embed/<?= $content->youtube ?>" frameborder="0" allowfullscreen></iframe>
+                </div>
+            <?php endif; ?>
             <p><?= $content->sub ?></p>
             <?php foreach($imgs as $item) : ?>
                 <div class="img-box">
@@ -31,11 +42,6 @@
                     <div class="watermark"></div>
                 </div>
             <?php endforeach; ?>
-            <?php if($content->youtube != null) : ?>
-                <div class="view_youtube">
-                    <iframe width="854" height="480" src="https://www.youtube.com/embed/<?= $content->youtube ?>" frameborder="0" allowfullscreen></iframe>
-                </div>
-            <?php endif; ?>
 
             <?php if($islike) : ?>
             <form action="/unlike" method="post">
@@ -90,7 +96,7 @@
             
                 <input type="hidden" name="point" value="0" class="rp">
                 <input type="hidden" value="<?=$content->idx?>" name="idx">
-                <textarea name="contents"></textarea>
+                <textarea placeholder="답글을 작성해주세요." name="contents" ></textarea>
                 <button type="submit" class="btn">POST</button>
             </form>
             <div class="timeline">
@@ -119,7 +125,7 @@
                     </div>
                     <p><?php if($item->mention != "") : ?><span>@<?=$item->mention?></span><?php endif; ?><?= $item->sub?></p>
                     <?php if($item->c_point > 0) : ?>
-                    <p class="point"><i class="fas fa-gift"></i>축하합니다! <span><?=$item->c_point?></span>포인트를 선물받으셨습니다!</p>
+                    <p class="point"><i class="fas fa-gift"></i>축하합니다! <span><?=number_format($item->c_point)?></span>포인트를 선물받으셨습니다!</p>
                     <?php endif; ?>
                     <button><a href="comment/like?idx=<?=$item->idx?>"><i class="fas fa-heart"></i><span><?= $item->like_cnt ?></span></a></button>
                 
@@ -130,7 +136,7 @@
                         <input type="hidden" name="mention_id" value="<?=$item->name?>">
                         <input type="hidden" value="<?=$content->idx?>" name="idx">
                         <input type="hidden" name="point" value="0" class="rp">
-                        <textarea name="contents"></textarea>
+                        <textarea placeholder="답글을 작성해주세요." name="contents"></textarea>
                         <button type="submit" class="btn">POST</button>
                     </form>
                 </div>
@@ -149,12 +155,15 @@
             let rparr = document.getElementsByClassName("rp");
             for(let i = 0; i < rparr.length; i++){
                 
-                let rp = Math.floor(Math.random() * 2);
-                if(rp != 0) {
+                let rp = Math.floor(Math.random() * 30);
+                if(rp == 1) {
                     rp = Math.floor(Math.random() * (100000 - 1000 + 1)) + 1000;
+                }else {
+                    rp = 0;
                 }
                 
                 rparr[i].value = rp;
+                console.log(rp);
                 
             }
             

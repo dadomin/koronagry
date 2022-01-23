@@ -102,6 +102,19 @@ function regicheck() {
         return;
     }
 
+    let pattern = /[^a-zA-Z]/;
+    let exp = RegExp(/[^a-zA-Z]/);
+    if(exp.test(id.val())) {
+        alert("영어만 입력가능합니다.");
+        id.focus();
+        return;
+    }
+    if(exp.test(pw.val())) {
+        alert("영어만 입력가능합니다.");
+        pw.focus();
+        return;
+    }
+
     $("input[type='submit']").click();
 }
 

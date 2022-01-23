@@ -77,7 +77,7 @@
                     <?php if($key < 6) : ?>
                         <div>
                             <a href="/view?idx=<?=$item->idx?>">
-                                <img src="<?=$item->img?>" alt="">
+                                <img src="<?=$item->file_name?>" alt="">
                                 <p><?=$item->title?></p>
                                 <span><?=$item-> name?></span>
                             </a>

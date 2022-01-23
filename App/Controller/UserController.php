@@ -148,12 +148,22 @@ class UserController extends MasterController {
             exit;
         }
 
+
         $id = $_GET['id'];
+
+        if($user->id != 'admin' && $id == 'admin') {
+            DB::msgAndBack("잘못된 접근입니다.");
+            exit;
+        }
         $sql = "select * from `user` where `id` = ?";
         $pu = DB::fetch($sql, [$id]);
+
+        
+        $levelSql = "SELECT * FROM `level`";
+        $level = DB::fetchAll($levelSql,[]);
         
 
-        $this->render("profile", ["user" => $user, "pu" => $pu]);
+        $this->render("profile", ["user" => $user, "pu" => $pu, "level" => $level]);
     }
 
     public function profilechange() 

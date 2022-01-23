@@ -1,14 +1,42 @@
+
+<?php
+
+    $start = null;
+    if(isset($_GET['start'])){
+        $start = $_GET['start'];
+    }else {
+        $start=0;
+    }
+
+    $scale = 5;
+    $page_scale = 5;
+
+    $total_page = ceil($total / $scale);
+    $page = floor($total_page / $page_scale);
+    $n_page = floor($start / $page_scale);
+
+?>
+
 <div class="section_top">
     <h1>업체 소개</h1>
 </div>
 <section id="company-list">
 
-    <h1 class="title"><span>업체 목록</span><a href="/company/add" class="bold">+ 추가하기</a></h1>
-
+    <h1 class="title"><span>업체 목록</span><?php if($user->id == 'admin') : ?><a href="/company/add" class="bold">+ 추가하기</a><?php endif; ?></h1>
+    
     <div class="companies">
 
-        <?php foreach($list as $item) : ?>
-            <div class="company">
+
+        <?php 
+            $list = array_reverse($list);
+            $cnt = count($list);
+            $a = 1;
+            foreach($list as $item) : 
+            
+            $n = $scale*($start+1) - $total;
+            if($a > $scale*$start && $a < $scale*$start+6) :
+        ?>
+       <div class="company">
                 <div class="company-img">
                     <?php if($item->img == null) : ?>
                         <img src="./img/noimg.png" alt="">
@@ -46,9 +74,57 @@
                 </div>
                 <button>
                     <a href="/company&idx=<?= $item->idx ?>">Go <i class="fas fa-chevron-right"></i></a>
-                        </button>
+                </button>
             </div>
-        <?php endforeach; ?>
+
+        <?php 
+            endif;
+            $a++;
+            $cnt--;
+            endforeach; ?>
+        <form action="/introduce/search" method="get" class="search_box_center">
+            <div class="search_box">
+                <select name="tag" id="tag">
+                    <option value="name">이름</option>
+                    <option value="address">주소</option>
+                    <option value="info">정보</option>
+                </select>
+                <input type="text" name="contain">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </form>
+        <div class="list-page-btns">
+            
+            <?php
+
+                if($n_page > 0) {
+                    $p_start = ($n_page -1) * $page_scale;
+                    $link = "<button class='btn'><a href='/introduce&start=${p_start}'>";
+                    $link .= "Prev";
+                    $link .= "</a></button>";
+                    echo $link." ";
+                }
+                $is = $n_page*$page_scale;
+                for($i=$is; $i < $is+$page_scale; $i++){
+                    
+                        if($i < $total_page){
+                        $link = "<button class='btn'><a href='/introduce&start=${i}'>";
+                        $link .= $i+1;
+                        $link .= "</a></button>";
+                        echo $link." ";
+                    }
+                }
+
+                if($n_page < $page){
+                    $link = "<button class='btn'><a href='/introduce&start=${i}'>";
+                    $link .= "Next";
+                    $link .= "</a></button>";
+                    echo $link." ";
+                }
+
+
+            ?>
+        </div>
     </div>
 
 </section>
